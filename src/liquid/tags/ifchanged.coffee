@@ -1,4 +1,4 @@
-Liquid = require "../../liquid"
+Liquid = require "../../liquid_base"
 futures = require "futures"
 
 class Liquid.Ifchanged extends require("../block")

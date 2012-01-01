@@ -1,4 +1,4 @@
-Liquid = require "../../liquid"
+Liquid = require "../../liquid_base"
 
 # decrement is used in a place where one needs to insert a counter
 #     into a template, and needs the counter to survive across

@@ -1,4 +1,4 @@
-Liquid = require "../../liquid"
+Liquid = require "../../liquid_base"
 
 class Liquid.Raw extends require("../block")
   parse: (tokens) ->

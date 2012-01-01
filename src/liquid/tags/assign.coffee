@@ -1,4 +1,4 @@
-Liquid = require "../../liquid"
+Liquid = require "../../liquid_base"
 
 class Liquid.Assign extends require("../tag")
   SyntaxHelp = "Syntax Error in 'assign' - Valid syntax: assign [var] = [source]"
