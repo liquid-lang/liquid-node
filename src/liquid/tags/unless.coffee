@@ -1,4 +1,4 @@
-Liquid = require "../../liquid"
+Liquid = require "../../liquid_base"
 
 module.exports = class Unless extends require("./if")
 

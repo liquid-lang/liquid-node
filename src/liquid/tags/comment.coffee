@@ -1,4 +1,4 @@
-Liquid = require "../../liquid"
+Liquid = require "../../liquid_base"
 
 class Liquid.Comment extends require("../block")
   render: ->

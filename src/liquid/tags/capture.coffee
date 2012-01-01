@@ -1,4 +1,4 @@
-Liquid = require "../../liquid"
+Liquid = require "../../liquid_base"
 
 # Capture stores the result of a block into a variable without rendering it inplace.
 #

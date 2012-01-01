@@ -1,4 +1,4 @@
-Liquid = require "../liquid"
+Liquid = require "../liquid_base"
 _ = require("underscore")._
 futures = require "futures"
 
