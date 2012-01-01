@@ -31,6 +31,9 @@ Liquid.Template.registerFilter(Liquid.StandardFilters)
 # HtmlTags, FileSystem
 
 # Load Tags
-loadTags()
+try
+  loadTags()
+catch e
+  # Do nothing
 
 module.exports = Liquid
