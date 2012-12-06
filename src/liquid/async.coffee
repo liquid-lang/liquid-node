@@ -110,7 +110,7 @@ async =
       deferred.promise()
 
   join: (promises...) ->
-    async.parallel.forEach(array, (item) -> item)
+    async.parallel.forEach(promises, (item) -> item)
 
   isPromise: (v) ->
     v and v.isPromise
