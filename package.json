@@ -18,7 +18,7 @@
     "node": "~0.6.5"
   },
   "dependencies": {
-    "coffee-script": "git://github.com/jashkenas/coffee-script.git",
+    "coffee-script": "1.4.x",
     "underscore": ">=1.2.3"
   },
   "devDependencies": {
