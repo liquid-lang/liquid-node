@@ -93,7 +93,7 @@ module.exports = class For extends Liquid.Block
 
       return @renderElse(context) if segment.length == 0
 
-      segment = _.reverse segment if @reversed
+      segment.reverse() if @reversed
 
       length = segment.length
 
