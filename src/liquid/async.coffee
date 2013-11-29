@@ -23,8 +23,9 @@ module.exports = Async =
 
   map: (array, callback) ->
     Async.promise (deferred) ->
+      c = 0
       iterator = (item, cb) ->
-        Q.when(item).then((i) -> callback(i)).nodeify cb
+        Q.when(item).then((i) -> callback(i, c++)).nodeify cb
 
       async.mapSeries array, iterator, nodeify(deferred)
 

@@ -63,8 +63,8 @@ module.exports = class For extends Liquid.Block
       @reversed = match[3]
       @attributes = {}
 
-      Liquid.Helpers.scan(markup, Liquid.TagAttributes).forEach (key, value) =>
-        @attributes[key] = value
+      Liquid.Helpers.scan(markup, Liquid.TagAttributes).forEach (attr) =>
+        @attributes[attr[0]] = attr[1]
     else
       throw new Liquid.SyntaxError(SyntaxHelp)
 
@@ -84,12 +84,12 @@ module.exports = class For extends Liquid.Block
       from = if @attributes.offset == "continue"
         Number(context.registers["for"][@name]) or 0
       else
-        Number(context[@attributes.offset]) or 0
+        Number(@attributes.offset) or 0
 
-      limit = context[@attributes.limit]
+      limit = @attributes.limit
       to    = if limit then Number(limit) + from else null
 
-      segment = @sliceCollectionUsingEach(collection, from, to)
+      segment = @sliceCollection(collection, from, to)
 
       return @renderElse(context) if segment.length == 0
 
@@ -125,7 +125,7 @@ module.exports = class For extends Liquid.Block
     index = 0
     yielded = 0
 
-    _(collection).detect (item) =>
+    _(collection).find (item) =>
       if to and to <= index
         true
 
@@ -136,6 +136,9 @@ module.exports = class For extends Liquid.Block
       false
 
     segments
+
+  sliceCollection: (collection, from, to) ->
+    if to then collection[from...to] else collection[from...]
 
   renderElse: (context) ->
     if @elseBlock
