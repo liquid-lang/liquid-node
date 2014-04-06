@@ -11,7 +11,16 @@ customError = (name, inherit = global.Error) ->
       global.Error.captureStackTrace(@, arguments.callee)
 
   util.inherits(error, inherit)
-  error:: = inherit::
+  # No need to set the prototype because:
+  #
+  # 1) We've got util.inherits to handle prototype already
+  # 2) assigning prototype value directly will cause the instanceof operator
+  #    returing wrong values.
+  #
+  # See this gist for more example:
+  # https://gist.github.com/dotnil/8381942
+  #
+  # error:: = inherit::
   error
 
 Liquid.Error = customError "Error"
