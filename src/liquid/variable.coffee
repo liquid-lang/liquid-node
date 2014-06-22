@@ -56,6 +56,8 @@ module.exports = class Variable
     Promise
     .cast(context.get(@name))
     .then (value) =>
+      return '' unless value?
+      
       Promise
       .reduce(@filters, mapper, value)
       .then (value) =>

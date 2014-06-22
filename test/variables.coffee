@@ -78,6 +78,9 @@ describe "Liquid.Variable", ->
       variable.render(context).then (result) ->
         expect(result).to.equal ' $1000 '
 
+    it "renders empty string", ->
+      renderTest '', '{{ test | append: "" }}', {}
+
   # TODO: This doesn't work yet.
   it.skip "prevents 'RangeError: Maximum call stack size exceeded'", ->
     doc = "{{ a"
