@@ -1,4 +1,4 @@
-include: lib
+# include: lib
 test/
 .DS_Store
 .travis.yml
