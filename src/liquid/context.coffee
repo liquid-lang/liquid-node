@@ -220,7 +220,8 @@ module.exports = class Context
                   throw new Error "Unknown special accessor: #{part}"
             else
               ### @covignore ###
-              throw new Error "Unknown access: #{part}"
+              return "";
+              #throw new Error "Unknown access: #{part}"
 
       # The iterator walks through the parsed path step
       # by step and waits for promises to be fulfilled.

@@ -31,6 +31,9 @@ describe "Liquid.Condition", ->
     it "doesn't render on falsy object properties", ->
       renderTest('', '{% if foo.bar %}X{% endif %}', foo: { bar: null })
 
+    it "renders on non exists object", ->
+      renderTest('', '{% if foo.bar %}X{% endif %}', foo: { barNo: "abc" })
+
     it "renders on truthy constants", ->
       renderTest('X','{% if "foo" %}X{% endif %}')
 
