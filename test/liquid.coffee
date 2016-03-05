@@ -25,20 +25,41 @@ describe "Liquid", ->
       expect(@engine.parse("{% for i in c %}{% endfor %}")).to.be.fulfilled.then (template) ->
         expect(template.root.nodelist[0]).to.be.instanceOf Liquid.Block
 
-    it "parses includes", ->
-      @engine.registerFileSystem new Liquid.LocalFileSystem "./"
-      expect(@engine.parse("{% include 'test/fixtures/include' %}")).to.be.fulfilled.then (template) ->
-        expect(template.root.nodelist[0]).to.be.instanceOf Liquid.Include
+    context "includes", ->
+      it "parses includes", ->
+        @engine.registerFileSystem new Liquid.LocalFileSystem "./"
+        expect(@engine.parse("{% include 'test/fixtures/include' %}")).to.be.fulfilled.then (template) ->
+          expect(template.root.nodelist[0]).to.be.instanceOf Liquid.Include
 
-    it "parses includes and renders the template with the correct context", ->
-      @engine.registerFileSystem new Liquid.LocalFileSystem "./test"
-      expect(@engine.parseAndRender("{% include 'fixtures/include' %}", { name: 'Josh'})).to.be.fulfilled.then (output) ->
-        expect(output).to.eq "Josh"
+      it "parses includes and renders the template with the correct context", ->
+        @engine.registerFileSystem new Liquid.LocalFileSystem "./test"
+        expect(@engine.parseAndRender("{% include 'fixtures/include' %}", { name: 'Josh'})).to.be.fulfilled.then (output) ->
+          expect(output).to.eq "Josh"
 
-    it "parses nested-includes and renders the template with the correct context", ->
-      @engine.registerFileSystem new Liquid.LocalFileSystem "./test"
-      expect(@engine.parseAndRender("{% include 'fixtures/subinclude' %}", { name: 'Josh'})).to.be.fulfilled.then (output) ->
-        expect(output).to.eq "<h1>Josh</h1>"
+      it "parses nested-includes and renders the template with the correct context", ->
+        @engine.registerFileSystem new Liquid.LocalFileSystem "./test"
+        expect(@engine.parseAndRender("{% include 'fixtures/subinclude' %}", { name: 'Josh'})).to.be.fulfilled.then (output) ->
+          expect(output).to.eq "<h1>Josh</h1>"
+
+      it "parses includes with local variables", ->
+        @engine.registerFileSystem new Liquid.LocalFileSystem "./test"
+        expect(@engine.parseAndRender("{% include 'fixtures/include' name: 'Josh' %}")).to.be.fulfilled.then (output) ->
+          expect(output).to.eq "Josh"
+
+      it "parses includes with local variables but does not pollute the current scope", ->
+        @engine.registerFileSystem new Liquid.LocalFileSystem "./test"
+        expect(@engine.parseAndRender("{% include 'fixtures/include' name: 'Josh' %}{{name}}")).to.be.fulfilled.then (output) ->
+          expect(output).to.eq "Josh"
+
+      it "parses nested-includes rendered with local variables", ->
+        @engine.registerFileSystem new Liquid.LocalFileSystem "./test"
+        expect(@engine.parseAndRender("{% include 'fixtures/subinclude' name: 'Josh' %}")).to.be.fulfilled.then (output) ->
+          expect(output).to.eq "<h1>Josh</h1>"
+
+      it "parses includes with multiple local variables", ->
+        @engine.registerFileSystem new Liquid.LocalFileSystem "./test"
+        expect(@engine.parseAndRender("{% include 'fixtures/include_multiple' name: 'Josh', age: 19 %}")).to.be.fulfilled.then (output) ->
+          expect(output).to.eq "Josh aged 19"
 
 
     it "parses complex documents", ->
