@@ -76,9 +76,9 @@ module.exports = class Context
       @push(newScope)
       result = f()
 
-      if result?.nodeify?
+      if result?.then?
         popLater = true
-        result.nodeify => @pop()
+        result.then => @pop()
 
       result
     finally

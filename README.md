@@ -70,7 +70,7 @@ engine
 app.get(function(req, res) {
   engine
     .parseAndRender("hi {{name}}", { name: "tobi" })
-    .nodeify(function(err, result) {
+    .then(function(err, result) {
       if (err) {
         res.end("ERROR: " + err);
       } else {
