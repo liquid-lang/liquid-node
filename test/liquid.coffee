@@ -58,7 +58,7 @@ describe "Liquid", ->
 
       it "parses includes with multiple local variables", ->
         @engine.registerFileSystem new Liquid.LocalFileSystem "./test"
-        expect(@engine.parseAndRender("{% include 'fixtures/include_multiple' name: 'Josh', age: 19 %}")).to.be.fulfilled.then (output) ->
+        expect(@engine.parseAndRender("{% include 'fixtures/include_multiple', name: 'Josh', age: 19 %}")).to.be.fulfilled.then (output) ->
           expect(output).to.eq "Josh aged 19"
 
 

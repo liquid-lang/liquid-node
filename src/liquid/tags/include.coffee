@@ -24,6 +24,8 @@ module.exports = class Include extends Liquid.Tag
   render: (context) ->
     attributes = @attributes
     @subTemplate.then (i) ->
-      for k, v of attributes
-        context.set k, context.resolve v
-      i.render context
+      context.stack ->
+        Promise.resolve().then ->
+          for k, v of attributes
+            context.set k, context.resolve v
+          i.render context
