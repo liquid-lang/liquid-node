@@ -70,4 +70,5 @@ module.exports = class Variable
       f.context = context
       f.toString()
     .catch (e) ->
+      throw e if context.strictVariables and e instanceof Liquid.UndefinedVariable
       context.handleError e

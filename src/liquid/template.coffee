@@ -59,6 +59,8 @@ module.exports = class Liquid.Template
     if options?.filters
       context.registerFilters options.filters...
 
+    context.strictVariables = options?.strictVariables
+
     copyErrors = (actualResult) =>
       @errors = context.errors
       actualResult

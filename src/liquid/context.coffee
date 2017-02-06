@@ -11,6 +11,7 @@ module.exports = class Context
     @rethrowErrors = rethrowErrors
     @strainer = new engine?.Strainer(@) ? {}
     @squashInstanceAssignsWithEnvironments()
+    @strictVariables = false
 
   # Adds filters to this context.
   #
@@ -164,9 +165,13 @@ module.exports = class Context
 
     variable ?= @lookupAndEvaluate(variableScope, key)
 
+    if @strictVariables and not variable?
+      throw new Liquid.UndefinedVariable("Error - variable '#{key}' is undefined.")
+
     Promise.resolve(variable).then (v) => @liquify v
 
   variable: (markup) ->
+    strictVariables = @strictVariables
     Promise.resolve().then =>
       parts = Liquid.Helpers.scan(markup, Liquid.VariableParser)
       squareBracketed = /^\[(.*)\]$/
@@ -223,6 +228,7 @@ module.exports = class Context
         if index < parts.length
           mapper(parts[index], object).then (object) -> iterator(object, index + 1)
         else
+          throw new Liquid.UndefinedVariable("Error - variable '#{parts[index]}' is undefined.") if strictVariables and not object?
           Promise.resolve(object)
 
       iterator(object, 0).catch (err) ->
