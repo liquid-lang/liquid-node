@@ -71,6 +71,12 @@ describe "Liquid.Variable", ->
   it "allows ranges", ->
     renderTest '1-2-3', '{{ (1..3) | join:"-" }}'
 
+  it "throws for undefined when strict", () ->
+    variable = new Liquid.Variable "test"
+    context = new Liquid.Context
+    context.strictVariables = true
+    expect(variable.render(context)).to.be.rejectedWith 'Error - variable \'test\' is undefined.'
+
   context "with filter", ->
     it "renders", ->
       MoneyFilter =

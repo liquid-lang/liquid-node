@@ -84,3 +84,19 @@ describe "Liquid", ->
         expect(@engine.parse("foo")).to.be.fulfilled.then (template) ->
           ctx = new Liquid.Context
           expect(template.render(ctx, { registers: { x: 3 }, filters: {} })).to.be.fulfilled
+
+      it "fails for undefined context under strict mode", ->
+        expect(@engine.parseAndRender("{{ foo }}", null, { strictVariables: true })).to.be.rejectedWith 'Error - variable \'foo\' is undefined'
+
+        expect(@engine.parseAndRender("{{ foo.bar }}", null, { strictVariables: true })).to.be.rejectedWith 'Error - variable \'foo\' is undefined'
+
+        expect(@engine.parseAndRender("{{ foo.bar }}", { foo: {} }, { strictVariables: true })).to.be.rejectedWith 'Error: Couldn\'t walk variable: foo.bar: Liquid.UndefinedVariable: Error - variable \'undefined\' is undefined.'
+
+        @engine.parse("{{ foo }}").then (template) ->
+          expect(template.render(null, { strictVariables: true })).to.be.rejectedWith 'Error - variable \'foo\' is undefined'
+
+        @engine.parse("{{ foo.bar }}").then (template) ->
+          expect(template.render({}, { strictVariables: true })).to.be.rejectedWith 'Error - variable \'foo\' is undefined'
+
+        @engine.parse("{{ foo.bar }}").then (template) ->
+          expect(template.render({ foo: {} }, { strictVariables: true })).to.be.rejectedWith 'Error: Couldn\'t walk variable: foo.bar: Liquid.UndefinedVariable: Error - variable \'undefined\' is undefined.'

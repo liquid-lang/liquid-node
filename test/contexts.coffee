@@ -94,3 +94,7 @@ describe "Context", ->
       expect(@ctx.variable("a.first")).to.become 1
       expect(@ctx.variable("a.size")).to.become 2
       expect(@ctx.variable("a.last")).to.become 99
+
+    it "supports strict variables", ->
+      @ctx.strictVariables = true
+      expect(@ctx.variable("missing")).to.be.rejectedWith 'Error - variable \'missing\' is undefined.'
