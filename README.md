@@ -56,7 +56,7 @@ engine
   .parse("hi {{name}}")
   .then(function(template) { return template.render({ name: "tobi" }); })
   .then(function(result) { console.log(result) });
-  
+
 // or
 
 engine
@@ -101,8 +101,24 @@ to see how to implement them.
 class MyTag extends Liquid.Tag
   render: ->
     "that's me!"
-    
+
 engine.registerTag "MyTag", MyTag
+```
+
+### Strict modes
+
+Be default, Liquid will automatically render an empty string if an undefined variable reference error occurs.
+Passing `{ strictVariables : true }` in the render options, will cause any reference occurs to throw/reject.
+
+```js
+  engine
+    .parseAndRender("hi {{ name }}", {})
+    .catch((ex) => {}) // Error - variable 'name' is undefined
+
+  engine
+    .parse("hi {{ name }}")
+    .then((template) => template.render({}, { strictVariables: true }))
+    .catch((ex) => {}) // Error - variable 'name' is undefined
 ```
 
 ## How to run the tests
