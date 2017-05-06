@@ -1,0 +1,33 @@
+{
+  "env": {
+    "test": {
+      "plugins": [
+        "istanbul"
+      ]
+    },
+    "production": {
+      "plugins": [
+        "closure-elimination"
+      ]
+    }
+  },
+  "plugins": [
+    "lodash",
+    "transform-class-properties",
+    "extensible-destructuring"
+  ],
+  "presets": [
+    "stage-0",
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "last 2 versions",
+            "safari >= 7"
+          ]
+        }
+      }
+    ]
+  ]
+}
