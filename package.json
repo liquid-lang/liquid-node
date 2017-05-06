@@ -65,6 +65,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "jscoverage": "^0.6.0",
+    "lodash.range": "^3.2.0",
     "mocha": "^3.3.0",
     "mocha-lcov-reporter": "1.2.0",
     "sinon": "^1.16.1",
@@ -77,6 +78,6 @@
     "precommit": "npm test && npm run lint",
     "coverage": "npm run compile && LIQUID_NODE_COVERAGE=1 mocha --compilers coffee:coffee-script/register -r jscoverage --reporter mocha-lcov-reporter test | coveralls",
     "coverage-report": "npm run compile && LIQUID_NODE_COVERAGE=1 mocha --compilers coffee:coffee-script/register -r jscoverage --covout html test",
-    "lint": "coffeelint src/** test/**"
+    "lint": "coffeelint src/**/*.coffee test/*.coffee"
   }
 }
