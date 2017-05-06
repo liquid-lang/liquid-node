@@ -1,4 +1,4 @@
-import {Liquid, expect, renderTest} from './_helpers'
+import {Liquid, expect, renderTest} from './_helper'
 
 describe('Blocks (in general)', () => {
   beforeEach(function () {

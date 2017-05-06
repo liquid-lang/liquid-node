@@ -1,5 +1,5 @@
 Liquid = require "../liquid"
-Promise = require "native-or-bluebird"
+Promise = require "any-promise"
 
 module.exports = class Liquid.BlankFileSystem
   constructor: () ->

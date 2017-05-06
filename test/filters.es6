@@ -1,6 +1,6 @@
 import Promise from 'any-promise'
 import strftime from 'strftime'
-import { Liquid, expect } from './_helpers'
+import { Liquid, expect } from './_helper'
 
 const hasProp = Object.prototype.hasOwnProperty
 

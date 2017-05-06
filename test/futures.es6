@@ -1,4 +1,4 @@
-import { renderTest } from './_helpers'
+import { renderTest } from './_helper'
 import Promise from 'any-promise'
 
 const asyncResult = (result, delay = 1) => {

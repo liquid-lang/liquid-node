@@ -1,4 +1,4 @@
-import {Liquid, expect, sinon} from './_helpers'
+import {Liquid, expect, sinon} from './_helper'
 import range from 'lodash.range'
 
 describe('Context', () => {

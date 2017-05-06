@@ -1,4 +1,4 @@
-import {Liquid, expect, renderTest} from './_helpers'
+import {Liquid, expect, renderTest} from './_helper'
 import Promise from 'any-promise'
 
 describe('Liquid.Condition', () => {

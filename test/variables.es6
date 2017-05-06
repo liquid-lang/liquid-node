@@ -1,4 +1,4 @@
-import {Liquid, expect, renderTest} from './_helpers'
+import {Liquid, expect, renderTest} from './_helper'
 import util from 'util'
 
 describe('Liquid.Variable', () => {

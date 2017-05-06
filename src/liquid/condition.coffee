@@ -1,5 +1,5 @@
 Liquid = require "../liquid"
-Promise = require "native-or-bluebird"
+Promise = require "any-promise"
 
 # Container for liquid nodes which conveniently wraps decision making logic
 #

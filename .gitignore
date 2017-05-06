@@ -2,6 +2,9 @@
 /lib
 /dist
 /docs
+/.nyc_output
+/.code
+/coverage
 *.sublime*
 .idea
 covreporter.html

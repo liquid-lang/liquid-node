@@ -1,4 +1,4 @@
-import {Liquid, expect} from './_helpers'
+import {Liquid, expect} from './_helper'
 
 describe('Range', () => {
   it('can be converted to array', () => {
