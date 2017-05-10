@@ -19,8 +19,7 @@ describe('Context', () => {
   })
   context('.push', () => {
     it('pushes scopes', function () {
-      let scope
-      scope = {}
+      const scope = {}
       this.ctx.push(scope)
       return expect(this.ctx.pop()).to.equal(scope)
     })
@@ -38,8 +37,7 @@ describe('Context', () => {
     return expect((((({ctx}) => () => ctx.pop())))(this)).to.throw(/ContextError/)
   }))
   context('.stack', () => it('automatically pops scopes', function () {
-    let mySpy
-    mySpy = sinon.spy()
+    const mySpy = sinon.spy()
     this.ctx.stack(null, mySpy)
     expect(mySpy).to.have.been.calledOnce()
     return expect(this.ctx.scopes.length).to.equal(1)
@@ -84,8 +82,7 @@ describe('Context', () => {
     })
   })
   context('.clearInstanceAssigns', () => it('clears current scope', function () {
-    let scope
-    scope = {
+    const scope = {
       x: 1
     }
     this.ctx.push(scope)

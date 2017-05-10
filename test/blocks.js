@@ -66,10 +66,9 @@ describe('For', () => {
     }))
   })
   describe('with reverse', () => it('does not modify the source array', () => {
-    let array
-    array = [1, 2, 3]
+    const array = [1, 2, 3]
     renderTest('321', '{% for item in array reversed %}{{ item }}{% endfor %}', {
-      array: array
+      array
     }).then(() => {
       expect(array.length).to.eql(3)
       expect(array[0]).to.eql(1)

@@ -2,12 +2,7 @@ import Promise from 'any-promise'
 import strftime from 'strftime'
 import { Liquid, expect } from './_helper'
 
-const hasProp = Object.prototype.hasOwnProperty
-
 describe('StandardFilters', () => {
-  let filter
-  let filterName
-  let ref
   beforeEach(function () {
     this.filters = Liquid.StandardFilters
   })
@@ -15,7 +10,7 @@ describe('StandardFilters', () => {
     const noop = () => {}
     expect(this.filters.upcase({
       toString () {
-        noop()
+        return noop()
       }
     })).to.equal('FUNCTION () {}')
     expect(this.filters.upcase({
@@ -25,15 +20,12 @@ describe('StandardFilters', () => {
   describe('taking array inputs', () => it('handles non-arrays', function () {
     expect(this.filters.sort(1)).to.become([1])
   }))
-  ref = Liquid.StandardFilters
-  for (filterName in ref) {
-    if (!hasProp.call(ref, filterName)) continue
-    filter = ref[filterName]
-    describe(filterName, () => [null, void 0, true, false, 1, 'string', [], {}].forEach(param => {
+  Array.from(Liquid.StandardFilters).forEach(function (filter) {
+    describe(filter.name, () => [null, undefined, true, false, 1, 'string', [], {}].forEach(param => {
       const paramString = JSON.stringify(param)
       it(`handles \`${paramString}\` as input`, () => expect(() => filter(param)).not.to.throw())
     }))
-  }
+  })
   describe('size', () => {
     it("returns 0 for ''", function () {
       expect(this.filters.size('')).to.equal(0)
@@ -65,10 +57,9 @@ describe('StandardFilters', () => {
       expect(this.filters.downcase('HiThere')).to.equal('hithere')
     })
     it('uses toString', function () {
-      let o
-      o = {
-        toString: function () {
-          'aString'
+      const o = {
+        toString () {
+          return 'aString'
         }
       }
       expect(this.filters.downcase(o)).to.equal('astring')
@@ -79,10 +70,9 @@ describe('StandardFilters', () => {
       expect(this.filters.upcase('HiThere')).to.equal('HITHERE')
     })
     it('uses toString', function () {
-      let o
-      o = {
-        toString: function () {
-          'aString'
+      const o = {
+        toString () {
+          return 'aString'
         }
       }
       expect(this.filters.upcase(o)).to.equal('ASTRING')
@@ -128,8 +118,7 @@ describe('StandardFilters', () => {
       ])
     })
     it('sorts on future properties', function () {
-      let input
-      input = [
+      const input = [
         {
           count: Promise.resolve(5)
         }, {
@@ -190,8 +179,7 @@ describe('StandardFilters', () => {
     expect(this.filters.remove_first('a a a a', 'a')).to.equal(' a a a')
   }))
   describe('date', () => {
-    let parseDate
-    parseDate = s => new Date(Date.parse(s))
+    const parseDate = s => new Date(Date.parse(s))
     it('formats dates', function () {
       expect(this.filters.date(parseDate('2006-05-05 10:00:00'), '%B')).to.equal('May')
       expect(this.filters.date(parseDate('2006-06-05 10:00:00'), '%B')).to.equal('June')

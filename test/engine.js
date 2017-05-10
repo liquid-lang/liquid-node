@@ -5,33 +5,27 @@ describe('Engine', () => {
     this.filters = Liquid.StandardFilters
   })
   it('should create strainers', () => {
-    let engine
-    let strainer
-    engine = new Liquid.Engine()
-    strainer = new engine.Strainer()
-    return expect(strainer.size).to.exist
+    const engine = new Liquid.Engine()
+    const strainer = new engine.Strainer()
+    return expect(strainer.size).to.exist()
   })
   return it('should create separate strainers', () => {
-    let engine1
-    let engine2
-    let strainer1
-    let strainer2
-    engine1 = new Liquid.Engine()
+    const engine1 = new Liquid.Engine()
     engine1.registerFilters({
-      foo1: function () {
+      foo1 () {
         return 'foo1'
       }
     })
-    strainer1 = new engine1.Strainer()
+    const strainer1 = new engine1.Strainer()
     expect(strainer1.size).to.exist()
     expect(strainer1.foo1).to.exist()
-    engine2 = new Liquid.Engine()
+    const engine2 = new Liquid.Engine()
     engine2.registerFilters({
-      foo2: function () {
+      foo2 () {
         return 'foo2'
       }
     })
-    strainer2 = new engine2.Strainer()
+    const strainer2 = new engine2.Strainer()
     expect(strainer2.size).to.exist()
     expect(strainer2.foo2).to.exist()
     expect(strainer1.foo2).not.to.exist()

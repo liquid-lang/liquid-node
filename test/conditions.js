@@ -3,8 +3,7 @@ import Promise from 'any-promise'
 
 describe('Liquid.Condition', () => {
   it('evaluates without a context', () => {
-    let c
-    c = new Liquid.Condition('1', '==', '1')
+    const c = new Liquid.Condition('1', '==', '1')
     return expect(c.evaluate()).to.be.fulfilled.then(v => expect(v).to.equal(true))
   })
   it('fails on illegal operators', () => renderTest('Liquid error: Unknown operator baz', '{% if foo baz bar %}X{% endif %}', {}, false))

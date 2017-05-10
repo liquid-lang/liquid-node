@@ -17,10 +17,9 @@ describe('Drop', () => {
     return expect(this.drop).to.be['instanceof'](Liquid.Drop)
   })
   it('protects regular objects', () => {
-    let notDrop
-    notDrop = {
+    const notDrop = {
       a: 1,
-      b: function () {
+      b () {
         return 'foo'
       }
     }

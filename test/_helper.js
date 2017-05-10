@@ -6,7 +6,7 @@ import chaiAsPromised from 'chai-as-promised'
 import sinonChai from 'sinon-chai'
 
 const requireLiquid = () => require(`../${process.env.LIQUID_NODE_COVERAGE ? 'lib' : 'src'}/index`)
-const Liquid = requireLiquid()
+const {Liquid} = requireLiquid()
 
 chai.use(chaiAsPromised)
 chai.use(sinonChai)
@@ -31,14 +31,13 @@ const renderTest = (expected, templateString, assigns, rethrowErrors = true) => 
     expect(output).to.be.a('string')
     if (expected instanceof RegExp) {
       return expect(output).to.match(expected)
-    } else {
-      return expect(output).to.eq(expected)
     }
+    return expect(output).to.eq(expected)
   })
   return Promise.all([expect(parser).to.be.fulfilled, expect(renderer).to.be.fulfilled, test])
 }
 
-export default {
+export {
   chai,
   expect,
   Liquid,
