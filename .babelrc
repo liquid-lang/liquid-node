@@ -14,13 +14,19 @@
   "plugins": [
     "lodash",
     "transform-class-properties",
-    "extensible-destructuring" ,
-    [ "module-resolver", {
-      "root": ["./src", "./lib"],
-      "alias": {
-        "test": "./test"
+    "extensible-destructuring",
+    [
+      "module-resolver",
+      {
+        "root": [
+          "./src",
+          "./lib"
+        ],
+        "alias": {
+          "test": "./test"
+        }
       }
-    }]
+    ]
   ],
   "presets": [
     "stage-0",
@@ -31,6 +37,7 @@
           "node": 6
         }
       }
-    ]
+    ],
+    "flow"
   ]
 }

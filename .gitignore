@@ -9,3 +9,4 @@
 .idea
 covreporter.html
 npm-debug.log
+/flow-typed

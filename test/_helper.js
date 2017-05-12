@@ -5,8 +5,10 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import sinonChai from 'sinon-chai'
 
-const requireLiquid = () => require(`../${process.env.LIQUID_NODE_COVERAGE ? 'lib' : 'src'}/index`)
-const {Liquid} = requireLiquid()
+import {Liquid} from '../src'
+
+// const requireLiquid = () => require(`../${process.env.LIQUID_NODE_COVERAGE ? 'lib' : 'src'}/index`)
+// const {Liquid} = requireLiquid()
 
 chai.use(chaiAsPromised)
 chai.use(sinonChai)
@@ -42,7 +44,7 @@ export {
   expect,
   Liquid,
   renderTest,
-  requireLiquid,
+  // requireLiquid,
   sinon,
   stringify
 }

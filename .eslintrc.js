@@ -5,7 +5,7 @@ module.exports = {
     es6: true,
     node: true
   },
-  extends: ['standard', 'plugin:import/errors'],
+  extends: ['standard', 'plugin:import/errors', 'plugin:flowtype/recommended'],
   parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
@@ -15,7 +15,7 @@ module.exports = {
     ecmaVersion: 8,
     sourceType: 'module'
   },
-  plugins: [ 'standard', 'promise' ],
+  plugins: ['flowtype', 'standard', 'promise' ],
   rules: {
     'import/extensions': ['error', 'never', {
       coffee: 'always',
@@ -24,6 +24,9 @@ module.exports = {
     'prefer-const': 'error'
   },
   settings: {
+    flowtype: {
+      onlyFilesWithFlowAnnotation: true
+    },
     'import/parser': 'babel-eslint'
   }
 
