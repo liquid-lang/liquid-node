@@ -2,7 +2,7 @@ import _Liquid from './liquid'
 import Engine from './liquid/engine'
 import * as Helpers from './liquid/helpers'
 import Range from './liquid/range'
-import Iterable from './liquid/iterable'
+import Iterable, {IterableForArray} from './liquid/iterable'
 import {Drop} from './liquid/drop'
 import Context from './liquid/context'
 import Tag from './liquid/tag'
@@ -10,7 +10,7 @@ import {Block} from './liquid/block'
 import {Document} from './liquid/document'
 import Variable from './liquid/variable'
 import Template from './liquid/template'
-import {StandardFilters} from './liquid/standard_filters'
+import * as StandardFilters from './liquid/standard_filters'
 import Condition from './liquid/condition'
 import ElseCondition from './liquid/else_condition'
 import BlankFileSystem from './liquid/blank_file_system'
@@ -70,6 +70,7 @@ const Liquid = Object.assign({}, _Liquid, ...errorNames, {
   Include,
   Increment,
   Iterable,
+  IterableForArray,
   LocalFileSystem,
   Range,
   Raw,

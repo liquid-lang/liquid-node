@@ -1,13 +1,20 @@
+// @flow
 import Template from './template'
 import Liquid from '../liquid'
+import {ArgumentError} from './errors'
+import BlankFileSystem from './blank_file_system'
+import {Block} from './block'
+import * as StandardFilters from './standard_filters'
+import Tag from './tag'
 
-class Engine {
+class Engine <T> {
+  tags: Map<string, Tag> = new Map()
+  Strainer: Map<string, Function> = new Map()
+  fileSystem = new BlankFileSystem()
+
   constructor () {
-    const self = this
-    this.tags = {}
-    this.Strainer = (context) => {
-      self.context = context
-    }
+    // this.tags: Map<string, Tag> = new Map()
+    // this.Strainer : Map<string, Function> = new Map()
     const isSubclassOf = (klass, ofKlass) => {
       if (typeof klass !== 'function') {
         return false
@@ -17,42 +24,44 @@ class Engine {
         return isSubclassOf((Object.getPrototypeOf(klass) ? Object.getPrototypeOf(klass).constructor : undefined), ofKlass)
       }
     }
-    this.registerFilters(Liquid.StandardFilters)
-    this.fileSystem = new Liquid.BlankFileSystem()
+    this.registerFilters(StandardFilters)
+    // this.fileSystem = new BlankFileSystem()
 
     for (const [tagName, tag] of Liquid) {
-      if (!isSubclassOf(tag, Liquid.Tag)) {
+      if (!isSubclassOf(tag, Tag)) {
         continue
       };
-      const isBlockOrTagBaseClass = [Liquid.Tag, Liquid.Block].includes(tag.constructor)
+      const isBlockOrTagBaseClass = [Tag, Block].includes(tag.constructor)
       if (!isBlockOrTagBaseClass) {
         this.registerTag(tagName.toLowerCase(), tag)
       }
     }
   }
-  registerTag (name, tag) {
-    this.tags[name] = tag
+  registerTag (name/*: string */, tag/*: Tag */) {
+    this.tags.set(name, tag)
   }
-  registerFilters (...filters) {
-    filters.forEach(filter => {
-      for (const [k, v] of filter) {
-        if (v instanceof Function) {
-          this.Strainer.prototype[k] = v
+  registerFilters (...filters: Array<{[key: string]: Function}>) {
+    for (const filter of filters) {
+      for (const filt in filter) {
+        if (filt.hasOwnProperty(filt)) {
+          if (filt instanceof Function) {
+            this.Strainer.set(filt, filter[filt])
+          }
         }
       }
-    })
+    }
   }
-  parse (source) {
+  parse (source/*: string */) {
     const template = new Template()
     return template.parse(this, source)
   }
-  parseAndRender (source, ...args) {
+  parseAndRender (source/*: string */, ...args/*: mixed[] */) {
     return this.parse(source)
     .then(template => template.render(...args))
   }
-  registerFileSystem (fileSystem) {
-    if (!(fileSystem instanceof Liquid.BlankFileSystem)) {
-      throw Liquid.ArgumentError('Must be subclass of Liquid.BlankFileSystem')
+  registerFileSystem (fileSystem/*: BlankFileSystem */) {
+    if (!(fileSystem instanceof BlankFileSystem)) {
+      throw ArgumentError('Must be subclass of Liquid.BlankFileSystem')
     }
     this.fileSystem = fileSystem
   }

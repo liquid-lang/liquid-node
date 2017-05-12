@@ -10,17 +10,17 @@ const VariableStart = /\{\{/
 const VariableEnd = /\}\}/
 const VariableIncompleteEnd = /\}\}?/
 const QuotedString = /"[^"]*"|'[^']*'/
-const QuotedFragment = RegExp(QuotedString.source + "|(?:[^\\s,\\|'\"]|" + QuotedString.source + ')+')
+const QuotedFragment = RegExp(`${QuotedString.source}|(?:[^\\s,\\|'"]|${QuotedString.source})+`)
 const StrictQuotedFragment = /"[^"]+"|'[^']+'|[^\s|:,]+/
-const FirstFilterArgument = RegExp(FilterArgumentSeparator.source + '(?:' + StrictQuotedFragment.source + ')')
-const OtherFilterArgument = RegExp(ArgumentSeparator.source + '(?:' + StrictQuotedFragment.source + ')')
-const SpacelessFilter = RegExp("^(?:'[^']+'|\"[^\"]+\"|[^'\"])*" + FilterSeparator.source + '(?:' + StrictQuotedFragment.source + ')(?:' + FirstFilterArgument.source + '(?:' + OtherFilterArgument.source + ')*)?')
-const Expression = RegExp('(?:' + QuotedFragment.source + '(?:' + SpacelessFilter.source + ')*)')
-const TagAttributes = RegExp('(\\w+)\\s*\\:\\s*(' + QuotedFragment.source + ')')
+const FirstFilterArgument = RegExp(`${FilterArgumentSeparator.source}(?:${StrictQuotedFragment.source})`)
+const OtherFilterArgument = RegExp(`${ArgumentSeparator.source}(?:${StrictQuotedFragment.source})`)
+const SpacelessFilter = RegExp(`^(?:'[^']+'|"[^"]+"|[^'"])*${FilterSeparator.source}(?:${StrictQuotedFragment.source})(?:${FirstFilterArgument.source}(?:${OtherFilterArgument.source})*)?`)
+const Expression = RegExp(`(?:${QuotedFragment.source}(?:${SpacelessFilter.source})*)`)
+const TagAttributes = RegExp(`(\\w+)\\s*\\:\\s*(${QuotedFragment.source})`)
 const AnyStartingTag = /\{\{|\{%/
-const PartialTemplateParser = RegExp(TagStart.source + '.*?' + TagEnd.source + '|' + VariableStart.source + '.*?' + VariableIncompleteEnd.source)
-const TemplateParser = RegExp('(' + PartialTemplateParser.source + '|' + AnyStartingTag.source + ')')
-const VariableParser = RegExp('\\[[^\\]]+\\]|' + VariableSegment.source + '+\\??')
+const PartialTemplateParser = RegExp(`${TagStart.source}.*?${TagEnd.source}|${VariableStart.source}.*?${VariableIncompleteEnd.source}`)
+const TemplateParser = RegExp(`(${PartialTemplateParser.source}|${AnyStartingTag.source})`)
+const VariableParser = RegExp(`\\[[^\\]]+\\]|${VariableSegment.source}+\\??`)
 
 export default {
   FilterSeparator,
