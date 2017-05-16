@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import {Liquid, expect} from './_helper'
 
 describe('Range', () => {
@@ -26,3 +27,4 @@ describe('Range', () => {
     return expect(new Liquid.Range(4, 0).some(v => v === 10)).to.not.be.ok
   }))
 })
+/* eslint-enable no-unused-expressions */

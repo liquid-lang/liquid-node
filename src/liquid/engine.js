@@ -1,13 +1,13 @@
 // @flow
 import Template from './template'
-import Liquid from '../liquid'
 import {ArgumentError} from './errors'
 import BlankFileSystem from './blank_file_system'
 import {Block} from './block'
-import * as StandardFilters from './standard_filters'
+import StandardFilters from './standard_filters'
 import Tag from './tag'
+import Tags from './tags'
 
-class Engine <T> {
+class Engine {
   tags: Map<string, Tag> = new Map()
   Strainer: Map<string, Function> = new Map()
   fileSystem = new BlankFileSystem()
@@ -18,38 +18,35 @@ class Engine <T> {
     const isSubclassOf = (klass, ofKlass) => {
       if (typeof klass !== 'function') {
         return false
-      } else if (klass === ofKlass) {
-        return true
-      } else {
-        return isSubclassOf((Object.getPrototypeOf(klass) ? Object.getPrototypeOf(klass).constructor : undefined), ofKlass)
       }
+      if (klass === ofKlass) {
+        return true
+      }
+      return klass instanceof ofKlass
     }
     this.registerFilters(StandardFilters)
     // this.fileSystem = new BlankFileSystem()
 
-    for (const [tagName, tag] of Liquid) {
-      if (!isSubclassOf(tag, Tag)) {
-        continue
-      };
-      const isBlockOrTagBaseClass = [Tag, Block].includes(tag.constructor)
-      if (!isBlockOrTagBaseClass) {
-        this.registerTag(tagName.toLowerCase(), tag)
+    for (const tag in Tags) {
+      if (Tags.hasOwnProperty(tag)) {
+        const func = Tags[tag]
+        if (!isSubclassOf(func, Tag)) {
+          continue
+        }
+        const isBlockOrTagBaseClass = [Tag, Block].includes(func.constructor)
+        if (!isBlockOrTagBaseClass) {
+          this.registerTag(tag.toLowerCase(), func)
+        }
       }
     }
   }
   registerTag (name/*: string */, tag/*: Tag */) {
     this.tags.set(name, tag)
   }
-  registerFilters (...filters: Array<{[key: string]: Function}>) {
-    for (const filter of filters) {
-      for (const filt in filter) {
-        if (filt.hasOwnProperty(filt)) {
-          if (filt instanceof Function) {
-            this.Strainer.set(filt, filter[filt])
-          }
-        }
-      }
-    }
+  registerFilters (filters: Map<string, Function>) {
+    Array.from(filters.entries())
+         .filter(([key, fun]) => fun != null)
+         .forEach(([key, fun]) => this.Strainer.set(key, fun))
   }
   parse (source/*: string */) {
     const template = new Template()

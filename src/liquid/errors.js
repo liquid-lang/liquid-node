@@ -4,7 +4,7 @@ export class Error extends global.Error {
     super(message)
     this.message = message
     if (global.Error.captureStackTrace) {
-      global.Error.captureStackTrace(this, arguments.callee)
+      global.Error.captureStackTrace(this, this.constructor)
     }
   }
 }

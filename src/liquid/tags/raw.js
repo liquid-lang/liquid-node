@@ -20,4 +20,4 @@ class Raw extends Block {
   }
 }
 
-export {Raw}
+export default Raw

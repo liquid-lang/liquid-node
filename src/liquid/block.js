@@ -1,7 +1,17 @@
+// @flow
 import Promise from 'any-promise'
 import Tag from './tag'
+import Context from './context'
+// import type Template from './template'
 import {SyntaxError} from './errors'
 import {TagStart, TagEnd, VariableStart, VariableEnd} from './regexps'
+
+type Token = {
+  value: string,
+  filename: string,
+  line: number,
+  col: number
+}
 
 const PromiseEach = (promises, cb) => {
   const iterator = index => {
@@ -34,7 +44,7 @@ class Block extends Tag {
   blockName () {
     return this.tagName
   }
-  constructor (template) {
+  constructor (template/*: string */) {
     super(template)
     this.template = template
   }
@@ -42,7 +52,7 @@ class Block extends Tag {
     this.ended = true
   }
 
-  parse (tokens) {
+  parse (...tokens: Array<Token>) {
     if (tokens.length === 0 || this.ended) {
       return Promise.resolve()
     }
@@ -61,10 +71,10 @@ class Block extends Tag {
                 }
               }
               throw e
-            }).then(() => self.parse(tokens))
+            }).then(() => self.parse(...tokens))
   }
 
-  parseToken (token, tokens) {
+  parseToken (token: Token, tokens: Array<Token>) {
     if (Block.IsTag.test(token.value)) {
       const match = Block.FullToken.exec(token.value)
       if (!match) {
@@ -89,10 +99,10 @@ class Block extends Tag {
     }
   }
 
-  render (context) {
+  render (context/*: Context */) {
     return this.renderAll(this.nodelist, context)
   }
-  renderAll (list, context) {
+  renderAll (list: Array<Promise>, context: Context) {
     const accumulator = []
     return PromiseEach(list, token => {
       if (token != null && typeof token.render !== 'function') {
@@ -104,7 +114,7 @@ class Block extends Tag {
               .then(s => accumulator.push(s), e => accumulator.push(context.handleError(e)))
     }).then(() => accumulator)
   }
-  unknownTag (tag, params, tokens) {
+  unknownTag (tag/*: Tag | string */, params: Array<any>, tokens: Array<Token>) {
     if (tag === 'else') {
       throw new SyntaxError(`${this.blockName()} tag does not expect else tag`)
     }

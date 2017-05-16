@@ -2,7 +2,7 @@ import PromiseReduce from '../../promise_reduce'
 import {QuotedFragment} from '../regexps'
 import {Block} from '../block'
 
-export class If extends Block {
+export default class If extends Block {
   static SyntaxHelp = "Syntax Error in tag 'if' - Valid syntax: if [expression]"
   static Syntax = RegExp('(' + QuotedFragment.source + ')\\s*([=!<>a-z_]+)?\\s*(' + QuotedFragment.source + ')?')
   static ExpressionsAndOperators = RegExp('(?:\\b(?:\\s?and\\s?|\\s?or\\s?)\\b|(?:\\s*(?!\\b(?:\\s?and\\s?|\\s?or\\s?)\\b)(?:' + QuotedFragment.source + '|\\S+)\\s*)+)')

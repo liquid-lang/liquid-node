@@ -1,4 +1,4 @@
-import {If} from './if'
+import If from './if'
 
 class Unless extends If {
   parse () {

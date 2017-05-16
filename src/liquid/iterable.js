@@ -2,10 +2,10 @@
 import Range from './range'
 import Promise from 'any-promise'
 
-const isString = input => Object.prototype.toString.call(input) === '[object String]'
+const isString = (input: mixed): boolean => Object.prototype.toString.call(input) === '[object String]'
 
 export default class Iterable<T> {
-  first () {
+  first (): Promise<T> {
     return this.slice(0, 1).then(a => a[0])
   }
 
@@ -29,7 +29,7 @@ export default class Iterable<T> {
     throw new Error(`${this.constructor.name}.last() not implemented`)
   }
 
-  static cast (v/*: mixed | Array<mixed> */) {
+  static cast (v/*: any | Array<mixed> */) {
     if (v instanceof Iterable) {
       return v
     }
@@ -37,10 +37,10 @@ export default class Iterable<T> {
       return new IterableForArray(v.toArray())
     }
     if (Array.isArray(v)) {
-      return new IterableForArray((v: string).split(''))
+      return new IterableForArray(v)
     }
     if (isString(v)) {
-      return new IterableForArray(v.split(''))
+      return new IterableForArray((v: string).split(''))
     }
     if (v != null) {
       return new IterableForArray([v])
@@ -55,10 +55,10 @@ export class IterableForArray<T> extends Iterable<T> {
     super()
     this.array = array
   }
-  slice (...args) {
+  slice (...args/*: Array<number> */) {
     return Promise.resolve(this.array.slice(...args))
   }
-  last () {
+  last (): Promise<T> {
     return Promise.resolve(this.array[this.array.length - 1])
   }
 }
