@@ -20,9 +20,9 @@ describe('Range', () => {
     expect(new Liquid.Range(5, 0, -2).toArray()).to.deep.equal([5, 3, 1])
   })
   describe('.some', () => it('behaves as Array.some()', () => {
-    expect(new Liquid.Range(0, 4).some(v => v === 2)).to.be.ok()
-    expect(new Liquid.Range(4, 0).some(v => v === 2)).to.be.ok()
-    expect(new Liquid.Range(0, 4).some(v => v === 10)).to.not.be.ok()
-    expect(new Liquid.Range(4, 0).some(v => v === 10)).to.not.be.ok()
+    expect(new Liquid.Range(0, 4).some(v => v === 2)).to.be.ok
+    expect(new Liquid.Range(4, 0).some(v => v === 2)).to.be.ok
+    expect(new Liquid.Range(0, 4).some(v => v === 10)).to.not.be.ok
+    return expect(new Liquid.Range(4, 0).some(v => v === 10)).to.not.be.ok
   }))
 })

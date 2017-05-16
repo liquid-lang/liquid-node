@@ -1,10 +1,14 @@
+// @flow
 class Range {
-  constructor (start/*: number */, end/*: number */, step = 1) {
+  start: number
+  end: number
+  step: number = 1
+  constructor (start: number, end: number, step: number = 1) {
     this.start = start
     this.end = end
     this.step = step
     if (this.start > this.end) {
-      this.step = -1
+      this.step = -1 * Math.abs(step)
     }
     Object.seal(this)
   }
@@ -45,14 +49,14 @@ class Range {
       return false
     })
   }
-  toArray () {
-    const array = []
+  toArray (): Array<number> {
+    const array: Array<number> = []
     this.forEach((e) => {
       array.push(e)
     })
     return array
   }
-  get length () {
+  get length (): number {
     return Math.floor((this.end - this.start) / this.step)
   }
 }
