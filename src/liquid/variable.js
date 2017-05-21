@@ -2,7 +2,7 @@
 import { ArgumentSeparator, FilterArgumentSeparator, FilterSeparator, QuotedFragment } from './regexps'
 import {flatten, scan} from './helpers'
 import Context from './context'
-import {Drop} from './drop'
+import Drop from './drop'
 import {FilterNotFound} from './errors'
 import PromiseReduce from '../promise_reduce'
 
@@ -18,7 +18,12 @@ class Variable {
     this.markup = markup
     let match = Variable.FilterParser.exec(this.markup)
     if (!match) return
-    this.name = match[1]
+    if (match.length === 1) {
+      this.name = match[0]
+    } else {
+      this.name = match[1]
+    }
+    this.name = this.name.replace(/\s*/g, '')
     match = FilterListFragment.exec(match[2])
     if (!match) return
     const self = this

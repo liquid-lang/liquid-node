@@ -1,9 +1,10 @@
 // @flow
 import Promise from 'any-promise'
 import Tag from './tag'
-import Context from './context'
+// import Context from './context'
 // import type Template from './template'
 import {SyntaxError} from './errors'
+import Variable from './variable'
 import {TagStart, TagEnd, VariableStart, VariableEnd} from './regexps'
 
 type Token = {
@@ -52,7 +53,7 @@ class Block extends Tag {
     this.ended = true
   }
 
-  parse (...tokens: Array<Token>) {
+  parse (...tokens/*: Array<Token> */) {
     if (tokens.length === 0 || this.ended) {
       return Promise.resolve()
     }
@@ -73,7 +74,17 @@ class Block extends Tag {
               throw e
             }).then(() => self.parse(...tokens))
   }
+  createVariable (token: Token) {
+    let match
+    if (Block.ContentOfVariable.test(token.value)) {
+      match = Block.ContentOfVariable.exec(token.value)[1]
+    }
+    if (match) {
+      return new Variable(match)
+    }
 
+    throw new SyntaxError(`Variable ${token.value}' was not properly terminated with regexp: ${VariableEnd.inspect}`)
+  }
   parseToken (token: Token, tokens: Array<Token>) {
     if (Block.IsTag.test(token.value)) {
       const match = Block.FullToken.exec(token.value)
@@ -102,7 +113,7 @@ class Block extends Tag {
   render (context/*: Context */) {
     return this.renderAll(this.nodelist, context)
   }
-  renderAll (list: Array<Promise>, context: Context) {
+  renderAll (list/*: Array<Promise> */, context/*: Context */) {
     const accumulator = []
     return PromiseEach(list, token => {
       if (token != null && typeof token.render !== 'function') {
@@ -114,7 +125,7 @@ class Block extends Tag {
               .then(s => accumulator.push(s), e => accumulator.push(context.handleError(e)))
     }).then(() => accumulator)
   }
-  unknownTag (tag/*: Tag | string */, params: Array<any>, tokens: Array<Token>) {
+  unknownTag (tag/*: Tag | string */, params/*: Array<any> */, tokens/*: Array<Token> */) {
     if (tag === 'else') {
       throw new SyntaxError(`${this.blockName()} tag does not expect else tag`)
     }
@@ -129,4 +140,4 @@ Block.IsTag = RegExp(`^${TagStart.source}`)
 Block.IsVariable = RegExp(`^${VariableStart.source}`)
 Block.FullToken = RegExp(`^${TagStart.source}\\s*(\\w+)\\s*(.*)?${TagEnd.source}$`)
 Block.ContentOfVariable = RegExp(`^${VariableStart.source}(.*)${VariableEnd.source}$`)
-export { Block }
+export default Block

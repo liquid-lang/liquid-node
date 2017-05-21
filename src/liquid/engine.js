@@ -2,7 +2,7 @@
 import Template from './template'
 import {ArgumentError} from './errors'
 import BlankFileSystem from './blank_file_system'
-import {Block} from './block'
+import Block from './block'
 import StandardFilters from './standard_filters'
 import Tag from './tag'
 import Tags from './tags'
@@ -43,7 +43,7 @@ class Engine {
   registerTag (name/*: string */, tag/*: Tag */) {
     this.tags.set(name, tag)
   }
-  registerFilters (filters: Map<string, Function>) {
+  registerFilters (filters/*: Map<string, Function> */) {
     Array.from(filters.entries())
          .filter(([key, fun]) => fun != null)
          .forEach(([key, fun]) => this.Strainer.set(key, fun))

@@ -36,6 +36,9 @@ class Drop {
   hasKey (key) {
     return true
   }
+  has (key) {
+    this.hasKey(key)
+  }
   invokeDrop (methodOrKey) {
     if (this.constructor.isInvokable(methodOrKey)) {
       const value = this[methodOrKey]
@@ -68,4 +71,4 @@ class Drop {
   toString () { return `[Liquid.Drop ${this.constructor.name}]` }
 }
 
-export {Drop}
+export default Drop

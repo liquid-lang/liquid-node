@@ -11,19 +11,18 @@ class Tag {
     const self = this
     let parse
     if (this.afterParse) {
-      parse = this.parse(...args).then(() => self.afterParse(...args))
+      parse = () => Promise.resolve(self.parse(...args)).then(() => self.afterParse(...args))
     } else {
-      parse = this.parse(...args)
+      parse = () => Promise.resolve(self.parse(...args))
     }
 
     if (this.beforeParse) {
-      Promise.resolve(this.beforeParse(...args)).then(parse())
-    } else {
-      parse()
+      return Promise.resolve(this.beforeParse(...args)).then(parse())
     }
+    return parse()
   }
 
-  parse () {}
+  parse () { /* noop */ }
   name () {
     return this.constructor.name.toLowerCase()
   }

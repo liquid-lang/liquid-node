@@ -4,8 +4,7 @@ import {Liquid, expect} from './_helper'
 describe('Iterable', () => {
   describe('.cast', () => {
     it("doesn't cast iterables", () => {
-      let iterable
-      iterable = new Liquid.Iterable()
+      const iterable = new Liquid.Iterable()
       return expect(Liquid.Iterable.cast(iterable)).to.equal(iterable)
     })
     return it('casts null/undefined to an empty iterable', () => expect(Liquid.Iterable.cast(null).toArray()).to.become([]))

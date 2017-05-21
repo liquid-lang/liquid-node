@@ -68,8 +68,7 @@ describe('Liquid', () => {
   })
   context('template', () => context('.render()', () => {
     it('fails unless parsed', () => {
-      let template
-      template = new Liquid.Template()
+      const template = new Liquid.Template()
       expect(template.render()).to.be.rejectedWith(Error, /No document root/)
     })
     it('fails with illegal context', function () {

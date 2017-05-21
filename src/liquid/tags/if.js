@@ -1,6 +1,6 @@
 import PromiseReduce from '../../promise_reduce'
 import {QuotedFragment} from '../regexps'
-import {Block} from '../block'
+import Block from '../block'
 
 export default class If extends Block {
   static SyntaxHelp = "Syntax Error in tag 'if' - Valid syntax: if [expression]"

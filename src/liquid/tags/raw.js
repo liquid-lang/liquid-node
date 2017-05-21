@@ -1,5 +1,5 @@
 import Promise from 'any-promise'
-import {Block} from '../block'
+import Block from '../block'
 
 class Raw extends Block {
   parse (tokens/*: Array<token> */) {

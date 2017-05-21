@@ -1,23 +1,23 @@
 import {Liquid, expect, renderTest} from './_helper'
-
+let engine = new Liquid.Engine()
 describe('Blocks (in general)', () => {
   beforeEach(function () {
-    this.engine = new Liquid.Engine()
+    engine = new Liquid.Engine()
   })
   it("don't accept 'else'", function () {
-    expect(this.engine.parse('{% capture %}{% else %}{% endcapture %}')).to.be.rejectedWith(Liquid.SyntaxError, /tag does not expect else tag/)
+    expect(engine.parse('{% capture %}{% else %}{% endcapture %}')).to.be.rejectedWith(Liquid.SyntaxError, /tag does not expect else tag/)
   })
   it("don't accept plain 'end'", function () {
-    expect(this.engine.parse('{% capture %}{% end %}')).to.be.rejectedWith(Liquid.SyntaxError, /'end' is not a valid delimiter/)
+    expect(engine.parse('{% capture %}{% end %}')).to.be.rejectedWith(Liquid.SyntaxError, /'end' is not a valid delimiter/)
   })
   it('fail if not terminated', function () {
-    expect(this.engine.parse('{% capture %}')).to.be.rejectedWith(Liquid.SyntaxError, /tag was never closed/)
+    expect(engine.parse('{% capture %}')).to.be.rejectedWith(Liquid.SyntaxError, /tag was never closed/)
   })
   it('fail on odd tags', function () {
-    expect(this.engine.parse('{% %}')).to.be.rejectedWith(Liquid.SyntaxError, /was not properly terminated/)
+    expect(engine.parse('{% %}')).to.be.rejectedWith(Liquid.SyntaxError, /was not properly terminated/)
   })
   it('fail on illegal variables', function () {
-    expect(this.engine.parse('{{ 2394 ')).to.be.rejectedWith(Liquid.SyntaxError, /Variable .* was not properly terminated/)
+    expect(engine.parse('{{ 2394 ')).to.be.rejectedWith(Liquid.SyntaxError, /Variable .* was not properly terminated/)
   })
 })
 
@@ -146,7 +146,7 @@ describe('Raw', () => {
   it('ends on first endraw', () => renderTest('{% raw %}X', '{% raw %}{% raw %}X{% endraw %}'))
 })
 
-describe('Comment', () => it("it swallows it's body", () => renderTest('', '{% comment %}This is a comment{% endcomment %}')))
+describe('Comment', () => it('it swallows its body', () => renderTest('', '{% comment %}This is a comment{% endcomment %}')))
 
 describe('Increment', () => {
   it('increments like i++', () => renderTest('1', '{% increment i %}', {

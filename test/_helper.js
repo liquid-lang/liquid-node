@@ -22,10 +22,10 @@ const stringify = v => {
   }
 }
 
-const renderTest = (expected, templateString, assigns, rethrowErrors = true) => {
+function renderTest (expected, templateString, assigns, rethrowErrors = true) {
   const engine = new Liquid.Engine()
   const parser = engine.parse(templateString)
-  const renderer = parser.then(template => {
+  const renderer = parser.then((template) => {
     template.rethrowErrors = rethrowErrors
     return template.render(assigns)
   })

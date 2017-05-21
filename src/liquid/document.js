@@ -1,4 +1,4 @@
-import {Block} from './block'
+import Block from './block'
 
 class Document extends Block {
   /* we don't need markup to open this block */
@@ -19,4 +19,4 @@ class Document extends Block {
    */
   assertMissingDelimitation () {}
 }
-export { Document }
+export default Document

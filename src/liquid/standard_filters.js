@@ -163,7 +163,7 @@ StandardFilters.set('split', (input, pattern) => {
 
 // TODO!!!
 
-StandardFilters.set('flatten', input => toIterable(input).then(a => _flatten(a)))
+StandardFilters.set('flatten', input => Promise.resolve(toIterable(input)).then(a => _flatten(a)))
 StandardFilters.set('join', (input, glue = ' ') => StandardFilters.get('flatten')(input).then(a => a.join(glue)))
 
 // TODO!!!
