@@ -1,42 +1,39 @@
 
-import Promise from 'any-promise'
-import sinon from 'sinon'
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-import sinonChai from 'sinon-chai'
+import Promise from 'any-promise';
+import sinon from 'sinon';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import sinonChai from 'sinon-chai';
 
-import {Liquid} from '../src'
+import Liquid from '../lib';
 
-// const requireLiquid = () => require(`../${process.env.LIQUID_NODE_COVERAGE ? 'lib' : 'src'}/index`)
-// const {Liquid} = requireLiquid()
+chai.use(chaiAsPromised);
+chai.use(sinonChai);
+const expect = chai.expect;
 
-chai.use(chaiAsPromised)
-chai.use(sinonChai)
-const expect = chai.expect
-
-const stringify = v => {
+const stringify = (v) => {
   try {
-    return JSON.stringify(v, null, 2)
+    return JSON.stringify(v, null, 2);
   } catch (error) {
-    return `Couldn't stringify: ${v}`
+    return `Couldn't stringify: ${v}`;
   }
-}
+};
 
-function renderTest (expected, templateString, assigns, rethrowErrors = true) {
-  const engine = new Liquid.Engine()
-  const parser = engine.parse(templateString)
+function renderTest(expected, templateString, assigns, rethrowErrors = true) {
+  const engine = new Liquid.Engine();
+  const parser = engine.parse(templateString);
   const renderer = parser.then((template) => {
-    template.rethrowErrors = rethrowErrors
-    return template.render(assigns)
-  })
-  const test = renderer.then(output => {
-    expect(output).to.be.a('string')
+    template.rethrowErrors = rethrowErrors;
+    return template.render(assigns);
+  });
+  const test = renderer.then((output) => {
+    expect(output).to.be.a('string');
     if (expected instanceof RegExp) {
-      return expect(output).to.match(expected)
+      return expect(output).to.match(expected);
     }
-    return expect(output).to.eq(expected)
-  })
-  return Promise.all([expect(parser).to.be.fulfilled, expect(renderer).to.be.fulfilled, test])
+    return expect(output).to.eq(expected);
+  });
+  return Promise.all([expect(parser).to.be.fulfilled, expect(renderer).to.be.fulfilled, test]);
 }
 
 export {
@@ -46,5 +43,5 @@ export {
   renderTest,
   // requireLiquid,
   sinon,
-  stringify
-}
+  stringify,
+};

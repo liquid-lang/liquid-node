@@ -43,10 +43,8 @@
     "@segment/to-iso-string": "^1.0.1",
     "any-promise": "^1.3.0",
     "cross-env": "^4.0.0",
-    "dev": "^0.1.3",
     "lodash.has": "^4.5.2",
     "lodash.isempty": "^4.4.0",
-    "nyc": "^10.3.2",
     "pug": "^2.0.0-rc.1",
     "strftime": "^0.10.0"
   },
@@ -58,6 +56,7 @@
     "babel-plugin-istanbul": "^4.1.3",
     "babel-plugin-lodash": "^3.2.11",
     "babel-plugin-module-resolver": "^2.7.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.4.0",
@@ -69,6 +68,7 @@
     "coffeelint": "^1.11.1",
     "coveralls": "^2.11.4",
     "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-flowtype": "^2.32.1",
     "eslint-plugin-import": "^2.2.0",
@@ -76,6 +76,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "flow-bin": "^0.46.0",
+    "istanbul": "^0.4.5",
     "jscoverage": "^0.6.0",
     "lodash.range": "^3.2.0",
     "mocha": "^3.3.0",
@@ -85,18 +86,16 @@
     "sinon-chai": "^2.10.0"
   },
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha",
-    "test:coffee": "cross-env NODE_ENV=test mocha --compilers coffee:coffee-script/register -R spec",
+    "test": "npm run compile && cross-env NODE_ENV=test mocha",
     "compile": "rimraf lib && babel --out-dir lib --source-maps true src",
-    "compile:coffee": "rimraf lib && coffee --output lib --map --bare --compile src",
     "prepublish": "npm run precommit && npm run compile",
     "precommit": "npm test && npm run lint",
-    "cover": "nyc mocha",
+    "cover": "npm run compile && istanbul cover _mocha",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "coverage": "npm run compile && LIQUID_NODE_COVERAGE=1 mocha --compilers js:babel-core/register -r jscoverage --reporter mocha-lcov-reporter test | coveralls",
     "coverage-report": "npm run compile && LIQUID_NODE_COVERAGE=1 mocha --compilers js:babel-core/register -r jscoverage --covout html test",
     "lint": "eslint src test",
     "lint:fix": "eslint --fix src test",
-    "lint:coffee": "coffeelint src/**/*.coffee test/*.coffee"
+    "lint:coffee": "coffeelint src/**/*.coffee"
   }
 }

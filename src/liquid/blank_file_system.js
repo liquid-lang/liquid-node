@@ -1,11 +1,11 @@
 // @flow
-import Promise from 'any-promise'
-import {FileSystemError} from './errors'
+import { FileSystemError } from './errors';
 
 class BlankFileSystem {
-  readTemplateFile (templatePath: string) {
-    return Promise.reject(new FileSystemError("This file system doesn't allow includes"))
+  async readTemplateFile(templatePath: string) {
+    console.error(templatePath);
+    throw new FileSystemError('This file system doesn\'t allow includes');
   }
 }
 
-export default BlankFileSystem
+export default BlankFileSystem;

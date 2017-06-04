@@ -1,34 +1,44 @@
-export function flatten (array) {
-  const output = []
-  const _flatten = array => array.forEach(item => {
+// @flow
+
+export type Token = {
+  value: string,
+  filename: string,
+  line: number,
+  col: number,
+};
+
+export function flatten(array: string[]): string[] {
+  const output: string[] = [];
+  const internalFlatten = (arr: string[]) => arr.forEach((item: string[] | string) => {
     if (Array.isArray(item)) {
-      return _flatten(item)
-    } else {
-      return output.push(item)
+      return internalFlatten(item);
     }
-  })
-  _flatten(array)
-  return output
+    return output.push(item);
+  });
+  internalFlatten(array);
+  return output;
 }
-export function toFlatString (array) {
-  return flatten(array).join('')
+export function toFlatString(array: string[]) {
+  return flatten(array).join('');
 }
-export function scan (string, regexp, globalMatch = false) {
-  const result = []
-  const _scan = s => {
-    const match = regexp.exec(s)
+export function scan(string: string, regexp: RegExp, globalMatch: boolean = false): string[] {
+  const result: string[] = [];
+  const internalScan = (s: string) => {
+    const match = regexp.exec(s);
     if (match) {
       if (match.length === 1) {
-        result.push(match[0])
+        result.push(match[0]);
       } else {
-        result.push(match.slice(1))
+        result.push(...match.slice(1));
       }
-      const l = (globalMatch) ? 1 : match[0].length
+      const l = (globalMatch) ? 1 : match[0].length;
       if (match.index + l < s.length) {
-        return _scan(s.substring(match.index + l))
+        return internalScan(s.substring(match.index + l));
       }
     }
-  }
-  _scan(string)
-  return result
+    return null;
+  };
+  internalScan(string);
+  return result;
 }
+

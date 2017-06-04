@@ -1,116 +1,115 @@
-import Context from './context'
-
-const LITERALS = {
-  empty (v) {
-    return !((v != null ? v.length : void 0) > 0)
-  },
-  blank (v) {
-    return !v || v.toString().length === 0
-  }
-}
+// @flow
+import Context from './context';
+import Engine from './engine';
 
 class Condition {
-  constructor (left1, operator, right1) {
-    this.left = left1
-    this.operator = operator
-    this.right = right1
-    this.childRelation = null
-    this.childCondition = null
+
+  static LITERALS: Map<string, ((v: any) => boolean)> = new Map([
+    ['empty', (v: any) => {
+      if (v == null) return true;
+      return !(v.length > 0);
+    }],
+  ['blank', (v: any) => !v || v.toString().length === 0],
+  ]);
+  // tslint:disable-next-line:max-line-length
+  static OPERATORS: Map<string, ((left: any, right: any) => boolean)> = new Map([
+  ['==', (left: any, right: any) => Condition.equalVariables(left, right)],
+  ['is', (left: any, right: any) => Condition.equalVariables(left, right)],
+  ['!=', (left: any, right: any) => !Condition.equalVariables(left, right)],
+  ['<>', (left: any, right: any) => !Condition.equalVariables(left, right)],
+  ['isnt', (left: any, right: any) => !Condition.equalVariables(left, right)],
+  ['<', (left: any, right: any) => left < right],
+  ['>', (left: any, right: any) => left > right],
+  ['<=', (left: any, right: any) => left <= right],
+  ['>=', (left: any, right: any) => left >= right],
+    ['contains', (left: any[], right: any) => {
+      if (left != null) {
+        if (typeof left.includes === 'function') {
+          return left.includes(right);
+        }
+        if (typeof left.indexOf === 'function') {
+          return left.indexOf(right) !== -1;
+        }
+        return false;
+      }
+      return false;
+    }],
+  ]);
+
+  internalAttachment: any;
+  childCondition: Condition;
+  childRelation: string = '';
+  left: any;
+  operator: string;
+  right: any;
+  negate: boolean = false;
+  constructor(left1: any, operator: string, right1: any) {
+    this.left = left1;
+    this.operator = operator;
+    this.right = right1;
   }
 
-  evaluate (context = new Context()) {
-    const result = this.interpretCondition(this.left, this.right, this.operator, context)
+  async evaluate(context: Context = new Context(new Engine())): Promise<boolean> {
+    const result = await this.interpretCondition(this.left, this.right, this.operator, context);
     switch (this.childRelation) {
       case 'or':
-        return Promise.resolve(result).then(((_this => result => result || _this.childCondition.evaluate(context)))(this))
+        return result || this.childCondition.evaluate(context);
       case 'and':
-        return Promise.resolve(result).then(((_this => result => result && _this.childCondition.evaluate(context)))(this))
+        return result && this.childCondition.evaluate(context);
       default:
-        return result
+        return result;
     }
   }
-
-  or (childCondition) {
-    this.childCondition = childCondition
-    this.childRelation = 'or'
+  get attachment(): any {
+    return this.internalAttachment;
+  }
+  set attachment(v: any) {
+    this.internalAttachment = v;
   }
 
-  and (childCondition) {
-    this.childCondition = childCondition
-    this.childRelation = 'and'
+  or(childCondition: Condition) {
+    this.childCondition = childCondition;
+    this.childRelation = 'or';
   }
 
-  attach (attachment) {
-    this.attachment = attachment
+  and(childCondition: Condition) {
+    this.childCondition = childCondition;
+    this.childRelation = 'and';
   }
 
-  equalVariables (left, right) {
+  attach(attachment: any) {
+    this.internalAttachment = attachment;
+    return this.internalAttachment;
+  }
+
+  static equalVariables(left: any, right: any): boolean {
     if (typeof left === 'function') {
-      return left(right)
+      return left(right);
     } else if (typeof right === 'function') {
-      return right(left)
-    } else {
-      return left === right
+      return right(left);
     }
+    return left === right;
   }
 
-  resolveVariable (v, context) {
-    if (v in LITERALS) {
-      return Promise.resolve(LITERALS[v])
-    } else {
-      return context.get(v)
+  async resolveVariable(v: string, context: Context) {
+    if (Condition.LITERALS.has(v)) {
+      return Condition.LITERALS.get(v);
     }
+    return context.get(v);
   }
 
-  interpretCondition (left, right, op, context) {
+  async interpretCondition(left: string, right: string, op: string, context: Context) {
     if (op == null) {
-      return this.resolveVariable(left, context)
+      return !!(await this.resolveVariable(left, context));
     }
-    const operation = Condition.operators[op]
+    const operation = Condition.OPERATORS.get(op);
     if (operation == null) {
-      throw new Error(`Unknown operator ${op}`)
+      throw new Error(`Unknown operator ${op}`);
     }
-    left = this.resolveVariable(left, context)
-    right = this.resolveVariable(right, context)
-    return Promise.all([left, right]).then(((_this => arg => {
-      const left = arg[0]
-      const right = arg[1]
-      return operation(_this, left, right)
-    }))(this))
+    const lhs = await this.resolveVariable(left, context);
+    const rhs = await this.resolveVariable(right, context);
+    return operation(lhs, rhs);
   }
 }
 
-Condition.operators = {
-  '==': function (cond, left, right) {
-    return cond.equalVariables(left, right)
-  },
-  'is': function (cond, left, right) {
-    return cond.equalVariables(left, right)
-  },
-  '!=': function (cond, left, right) {
-    return !cond.equalVariables(left, right)
-  },
-  '<>': function (cond, left, right) {
-    return !cond.equalVariables(left, right)
-  },
-  'isnt': function (cond, left, right) {
-    return !cond.equalVariables(left, right)
-  },
-  '<': function (cond, left, right) {
-    return left < right
-  },
-  '>': function (cond, left, right) {
-    return left > right
-  },
-  '<=': function (cond, left, right) {
-    return left <= right
-  },
-  '>=': function (cond, left, right) {
-    return left >= right
-  },
-  'contains': function (cond, left, right) {
-    return (left != null ? typeof left.includes === 'function' ? left.includes(right) : void 0 : void 0)
-  }
-}
-
-export default Condition
+export default Condition;

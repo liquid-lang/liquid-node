@@ -1,8 +1,11 @@
-import Raw from './raw'
+// @flow
+import Raw from './raw';
 
 class Comment extends Raw {
-  render () {
-    return ''
+  /* eslint-disable class-methods-use-this */
+  async render() {
+    return '';
   }
+  /* eslint-enable class-methods-use-this */
 }
-export default Comment
+export default Comment;

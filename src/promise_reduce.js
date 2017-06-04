@@ -1,9 +1,11 @@
-import Promise from 'any-promise'
+// @flow
 
-const reduce = (collection, reducer, value) =>
+import * as Promise from 'any-promise';
+
+const reduce = (collection: any[], reducer: Function, value: any) =>
   Promise.all(collection).then(items =>
     items.reduce((promise, item, index, length) =>
-      promise.then(value => reducer(value, item, index, length)),
-      Promise.resolve(value)))
+      promise.then((val: any) => reducer(val, item, index, length)),
+      Promise.resolve(value)));
 
-export default reduce
+export default reduce;

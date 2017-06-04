@@ -1,7 +1,7 @@
 // @flow
-import Context from '../context'
-import Tag from '../tag'
-import Template from '../template'
+import Context from '../context';
+import Tag from '../tag';
+import Template from '../template';
 
 /**
  * decrement is used in a place where one needs to insert a
@@ -26,16 +26,17 @@ import Template from '../template'
  *
  */
 class Decrement extends Tag {
-  constructor (template: Template, tagName: string, markup: string) {
-    super(template, tagName, markup)
-    this.variable = markup.trim()
+  variable: string;
+  constructor(template: Template, tagName: string, markup: string) {
+    super(template, tagName, markup);
+    this.variable = markup.trim();
   }
-  render (context: Context) {
-    let value = (context.environments[0][this.variable]) || 0
-    value = value - 1
-    context.environments[0][this.variable] = value
-    return String(value)
+  async render(context: Context) {
+    let value = (context.environments[0].get(this.variable)) || 0;
+    value -= 1;
+    context.environments[0].set(this.variable, value);
+    return String(value);
   }
 }
 
-export default Decrement
+export default Decrement;

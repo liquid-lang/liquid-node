@@ -1,42 +1,54 @@
 // @flow
-import Promise from 'any-promise'
-import path from 'path'
-import fs from 'fs'
+import fs from 'fs';
+import path from 'path';
 
-import {ArgumentError, FileSystemError} from './errors'
-import BlankFileSystem from './blank_file_system'
+import { ArgumentError, FileSystemError } from './errors';
 
-const readFile = (fpath: string, encoding: string) => new Promise(function (resolve, reject) {
-  fs.readFile(fpath, encoding, (err, content) => {
+import BlankFileSystem from './blank_file_system';
+
+const readFile = async (fpath: string, encoding: string) => {
+  let retVal: string;
+  fs.readFile(fpath, encoding, async (err: Error, content: string) => {
     if (err) {
-      return reject(err)
+      throw err;
     }
-    return resolve(content)
-  })
-})
+    retVal = await content;
+  });
+  return retVal;
+};
 
-const PathPattern = /^[^./][a-zA-Z0-9-_/]+$/
+
+const pathPattern = /^[^./][a-zA-Z0-9-_/]+$/;
 
 class LocalFileSystem extends BlankFileSystem {
-  root: string
-  fileExtension: string
-  constructor (root: string, extension: string = 'html') {
-    super()
-    this.root = root
-    this.fileExtension = extension
+  root: string;
+  fileExtension: string;
+  constructor(root: string, extension: string = 'html') {
+    super();
+    this.root = root;
+    this.fileExtension = extension;
   }
 
-  readTemplateFile (templatePath: string) {
-    return this.fullPath(templatePath)
-            .then(fullPath => readFile(fullPath, 'utf8'))
-            .catch(err => { throw new FileSystemError(`Error loading template: ${err.message}`) })
-  }
-
-  fullPath (templatePath: string) {
-    if (PathPattern.test(templatePath)) {
-      return Promise.resolve(path.resolve(path.join(this.root, `${templatePath}.${this.fileExtension}`)))
+  async readTemplateFile(templatePath: string) {
+    try {
+      const fullPath = await this.fullPath(templatePath);
+      return readFile(fullPath, 'utf8');
+    } catch (err) {
+      throw new FileSystemError(`Error loading template: ${err.message}`);
     }
-    return Promise.reject(new ArgumentError(`Illegal template name '${templatePath}'`))
+  }
+
+  async fullPath(templatePath: string) {
+    try {
+      if (pathPattern.test(templatePath)) {
+        return path.resolve(path.join(
+        this.root,
+        `${templatePath}.${this.fileExtension}`,
+        ));
+      }
+    } catch (e) {
+      throw new ArgumentError(`Illegal template name '${templatePath}'`);
+    }
   }
 }
-export default LocalFileSystem
+export default LocalFileSystem;

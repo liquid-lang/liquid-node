@@ -1,9 +1,11 @@
-import Condition from './condition'
+// @flow
+import Condition from './condition';
+import Context from './context';
 
 class ElseCondition extends Condition {
-  evaluate () {
-    return true
+  constructor() {
+    super(true, '==', true);
   }
 }
 
-export default ElseCondition
+export default ElseCondition;

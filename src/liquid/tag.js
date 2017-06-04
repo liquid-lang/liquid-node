@@ -1,34 +1,39 @@
-import Promise from 'any-promise'
+// @flow
+import Context from './context';
+import Template from './template';
 
 class Tag {
-  constructor (template, tagName, markup) {
-    this.template = template
-    this.tagName = tagName
-    this.markup = markup
+  template: Template;
+  tagName: string;
+  markup: string;
+  constructor(template: Template, tagName: string, markup: string) {
+    this.template = template;
+    this.tagName = tagName;
+    this.markup = markup;
   }
 
-  parseWithCallbacks (...args) {
-    const self = this
-    let parse
-    if (this.afterParse) {
-      parse = () => Promise.resolve(self.parse(...args)).then(() => self.afterParse(...args))
-    } else {
-      parse = () => Promise.resolve(self.parse(...args))
-    }
-
+  async parseWithCallbacks(...args: mixed[]) {
     if (this.beforeParse) {
-      return Promise.resolve(this.beforeParse(...args)).then(parse())
+      await this.beforeParse(...args);
     }
-    return parse()
+    this.parse(...args);
+    if (this.afterParse) {
+      await this.afterParse(...args);
+    }
   }
-
-  parse () { /* noop */ }
-  name () {
-    return this.constructor.name.toLowerCase()
+  /* eslint-disable class-methods-use-this */
+  async afterParse() { /* no-op */ }
+  async beforeParse() { /* no-op */ }
+  async parse() { return false; }
+  /* eslint-disable no-unused-vars */
+  async render(context: Context) {
+    return '';
   }
-  render () {
-    return ''
+  /* eslint-enable no-unused-vars */
+  /* eslint-enable class-methods-use-this */
+  name() {
+    return this.constructor.name.toLowerCase();
   }
 }
 
-export default Tag
+export default Tag;

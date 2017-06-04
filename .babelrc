@@ -13,6 +13,7 @@
   },
   "plugins": [
     "lodash",
+    "transform-async-to-generator",
     "transform-class-properties",
     "extensible-destructuring",
     [

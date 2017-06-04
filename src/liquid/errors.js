@@ -1,10 +1,10 @@
 export class Error extends global.Error {
   name = 'Liquid.Error'
-  constructor (message) {
-    super(message)
-    this.message = message
+  constructor(message) {
+    super(message);
+    this.message = message;
     if (global.Error.captureStackTrace) {
-      global.Error.captureStackTrace(this, this.constructor)
+      global.Error.captureStackTrace(this, this.constructor);
     }
   }
 }

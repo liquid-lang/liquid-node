@@ -1,57 +1,50 @@
-import _Liquid from './liquid'
-import Engine from './liquid/engine'
-import * as Helpers from './liquid/helpers'
-import Range from './liquid/range'
-import Iterable, {IterableForArray} from './liquid/iterable'
+// @flow
+import Engine from './liquid/engine';
+import * as Helpers from './liquid/helpers';
 
-import Drop from './liquid/drop'
-import {Error, ArgumentError, ContextError, FilterNotFound, FileSystemError, StandardError, StackLevelError, SyntaxError} from './liquid/errors'
-import Context from './liquid/context'
-import Tag from './liquid/tag'
-import Block from './liquid/block'
-import Document from './liquid/document'
-import Variable from './liquid/variable'
-import Template from './liquid/template'
-import StandardFilters from './liquid/standard_filters'
-import Condition from './liquid/condition'
-import ElseCondition from './liquid/else_condition'
-import BlankFileSystem from './liquid/blank_file_system'
-import LocalFileSystem from './liquid/local_file_system'
+import {
+    ArgumentError,
+    ContextError,
+    Error,
+    FileSystemError,
+    FilterNotFound,
+    StackLevelError,
+    StandardError,
+    SyntaxError,
+} from './liquid/errors';
+import {
+  Assign,
+  Capture,
+  Case,
+  Comment,
+  Decrement,
+  For,
+  If,
+  Ifchanged,
+  Include,
+  Increment,
+  Raw,
+  Unless,
+} from './liquid/tags';
 
-import Assign from './liquid/tags/assign'
-import Capture from './liquid/tags/capture'
-import Case from './liquid/tags/case'
-import Comment from './liquid/tags/comment'
-import Decrement from './liquid/tags/decrement'
-import For from './liquid/tags/for'
-import If from './liquid/tags/if'
-import Ifchanged from './liquid/tags/ifchanged'
-import Increment from './liquid/tags/increment'
-import Raw from './liquid/tags/raw'
-import Unless from './liquid/tags/unless'
-import Include from './liquid/tags/include'
-// import util from 'util'
 
-// const customError = (name, inherit = global.Error) => {
-//   const error = message => {
-//     this.name = name
-//     this.message = message
-//     if (global.Error.captureStackTrace) {
-//       return global.Error.captureStackTrace(this, error)
-//     }
-//     util.inherits(error, inherit)
-//     return console.error()
-//   }
-//   return error
-// }
-//
-// const _Error = customError('Error')
-//
-// const errorNames = [ 'ArgumentError', 'ContextError', 'FilterNotFound', 'FileSystemError', 'StandardError',
-//   'StackLevelError', 'SyntaxError' ].map(className => ({[className]: customError(`Liquid.${className}`, _Error)}))
-// // errorNames.forEach(className => { Liquid[className] = customError(`Liquid.${className}`, Liquid.Error) })
+import Range from './liquid/range';
+import Iterable, { IterableForArray } from './liquid/iterable';
 
-const Liquid = Object.assign({}, _Liquid, {
+import Drop from './liquid/drop';
+import Context from './liquid/context';
+import Tag from './liquid/tag';
+import Block from './liquid/block';
+import Document from './liquid/document';
+import Variable from './liquid/variable';
+import Template from './liquid/template';
+import StandardFilters from './liquid/standard_filters';
+import Condition from './liquid/condition';
+import ElseCondition from './liquid/else_condition';
+import BlankFileSystem from './liquid/blank_file_system';
+import LocalFileSystem from './liquid/local_file_system';
+
+const Liquid = Object.assign({},  {
   ArgumentError,
   Assign,
   BlankFileSystem,
@@ -88,7 +81,7 @@ const Liquid = Object.assign({}, _Liquid, {
   Tag,
   Template,
   Unless,
-  Variable
-})
+  Variable,
+});
 
-export {Liquid}
+export default Liquid;

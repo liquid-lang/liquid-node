@@ -1,143 +1,218 @@
 // @flow
-import Promise from 'any-promise'
-import Tag from './tag'
-// import Context from './context'
-// import type Template from './template'
-import {SyntaxError} from './errors'
-import Variable from './variable'
-import {TagStart, TagEnd, VariableStart, VariableEnd} from './regexps'
 
-type Token = {
-  value: string,
-  filename: string,
-  line: number,
-  col: number
+import { TagEnd, TagStart, VariableEnd, VariableStart } from './regexps';
+
+import Context from './context';
+import { SyntaxError } from './errors';
+import Tag from './tag';
+import Template from './template';
+import type { Token } from './helpers';
+import Variable from './variable';
+
+async function promiseEach(promises: Promise<Tag>[], cb: Function) {
+  const iterator = async (index: number) => {
+    if (index >= promises.length) return;
+    const value = await promises[index];
+    await cb(value);
+    iterator(index + 1);
+  };
+  return iterator(0);
 }
-
-const PromiseEach = (promises, cb) => {
-  const iterator = index => {
+/*
+const promiseEach = (promises: Promise<Tag>[], cb: Function) => {
+  const iterator = async (index: number): Promise<string[]> => {
     if (index >= promises.length) {
-      return Promise.resolve()
+      return;
     }
-    const promise = promises[index]
+
+    const promise = promises[index];
     return Promise.resolve(promise)
-        .then(value => Promise.resolve(cb(value))
-        .then(() => iterator(index + 1)))
-  }
-  return iterator(0)
-}
+    .then(value => Promise.resolve(cb(value))
+    .then(() => iterator(index + 1)));
+  };
+  return iterator(0);
+};
+*/
 
+/**
+ * Generic Blocks
+ */
 class Block extends Tag {
-  afterParse () {
-    return this.assertMissingDelimitation()
+  ended: boolean;
+  nodelist: any[];
+  template: Template;
+  tagName: string;
+  static isTag = RegExp(`^${TagStart.source}`);
+  static isVariable = RegExp(`^${VariableStart.source}`);
+  static fullToken = RegExp(`^${TagStart.source}\\s*(\\w+)\\s*(.*)?${TagEnd.source}$`);
+  static contentOfVariable = RegExp(`^${VariableStart.source}(.*)${VariableEnd.source}$`);
+  async afterParse() {
+    return this.assertMissingDelimitation();
   }
-  assertMissingDelimitation () {
+  async assertMissingDelimitation() {
     if (!this.ended) {
-      throw new SyntaxError(`${this.blockName()} tag was never closed`)
+      throw new SyntaxError(`${this.blockName()} tag was never closed`);
     }
   }
-  beforeParse () {
-    this.nodelist = []
+  async beforeParse() {
+    this.nodelist = [];
   }
-  blockDelimiter () {
-    return `end${this.blockName()}`
+  blockDelimiter() {
+    return `end${this.blockName()}`;
   }
-  blockName () {
-    return this.tagName
+  blockName() {
+    return this.tagName;
   }
-  constructor (template/*: string */) {
-    super(template)
-    this.template = template
+  constructor(template: Template) {
+    super(template, '', '');
+    this.template = template;
   }
-  endTag () {
-    this.ended = true
+  endTag() {
+    this.ended = true;
+    return true;
   }
 
-  parse (...tokens/*: Array<Token> */) {
+//   parse(...tokens: Token[]) {
+//     if (tokens.length === 0 || this.ended) {
+//       return Promise.resolve();
+//     }
+//     const self = this;
+//     const token = tokens.shift();
+//     return Promise.resolve()
+//     .then(() => self.parseToken(token as Token, tokens))
+//     .catch((e) => {
+//       if (token) {
+//         e.message = `${e.message}\n    at ${
+//           token.value} (${token.filename}:${token.line}:${token.col})`;
+//         if (e.location == null) {
+//           const { col, line, filename } = token;
+//           e.location = {
+//             col,
+//             line,
+//             filename,
+//           };
+//         }
+//       }
+//       throw e;
+//     }).then(() => self.parse(...tokens));
+//   }
+
+  async parse(...tokens: Token[]) {
     if (tokens.length === 0 || this.ended) {
-      return Promise.resolve()
+      return true;
     }
-    const self = this
-    const token = tokens.shift()
-    return Promise.resolve()
-            .then(() => self.parseToken(token, tokens))
-            .catch(e => {
-              e.message = `${e.message}\n    at ${token.value} (${token.filename}:${token.line}:${token.col})`
-              if (e.location == null) {
-                const {col, line, filename} = token
-                e.location = {
-                  col,
-                  line,
-                  filename
-                }
-              }
-              throw e
-            }).then(() => self.parse(...tokens))
+    const token = tokens.shift();
+    let ok = true;
+    try {
+      if (token) {
+        this.parseToken(token, tokens);
+      }
+    } catch (e) {
+      if (token) {
+        e.message = `${e.message}\n    at ${
+          token.value} (${token.filename}:${token.line}:${token.col})`;
+        if (e.location == null) {
+          const { col, line, filename } = token;
+          e.location = {
+            col,
+            line,
+            filename,
+          };
+        }
+      }
+      ok = false;
+      throw e;
+    } finally {
+      await this.parse(...tokens);
+      return ok;
+    }
   }
-  createVariable (token: Token) {
-    let match
-    if (Block.ContentOfVariable.test(token.value)) {
-      match = Block.ContentOfVariable.exec(token.value)[1]
+  createVariable(token: Token) {
+    let match;
+    if (Block.contentOfVariable.test(token.value)) {
+      match = Block.contentOfVariable.exec(token.value);
     }
     if (match) {
-      return new Variable(match)
+      return new Variable(match[1]);
     }
 
-    throw new SyntaxError(`Variable ${token.value}' was not properly terminated with regexp: ${VariableEnd.inspect}`)
+    throw new SyntaxError(`Variable ${
+        token.value}' was not properly terminated with regexp: ${VariableEnd.source}`);
   }
-  parseToken (token: Token, tokens: Array<Token>) {
-    if (Block.IsTag.test(token.value)) {
-      const match = Block.FullToken.exec(token.value)
+  async parseToken(token: Token, tokens: Token[]) {
+    if (Block.isTag.test(token.value)) {
+      const match = Block.fullToken.exec(token.value);
       if (!match) {
-        throw new SyntaxError(`Tag '${token.value}' was not properly terminated with regexp: ${TagEnd.inspect}`)
+        throw new SyntaxError(`Tag '${
+          token.value}' was not properly terminated with regexp: ${TagEnd.source}`);
       }
       if (this.blockDelimiter() === match[1]) {
-        return this.endTag()
+        return this.endTag();
       }
-      const Tag = this.template.tags[match[1]]
-      if (!Tag) {
-        return this.unknownTag(match[1], match[2], tokens)
+      const [_, tagName, markup] = match;
+      console.info(_);
+      if (this.template.tags.get(tagName)) {
+        const tag = new (this.template.tags.get(tagName))(this.template, tagName, markup);
+        this.nodelist.push(tag);
+        return tag.parseWithCallbacks(tokens);
       }
-      const tag = new Tag(this.template, match[1], match[2])
-      this.nodelist.push(tag)
-      return tag.parseWithCallbacks(tokens)
-    } else if (Block.IsVariable.test(token.value)) {
-      return this.nodelist.push(this.createVariable(token))
+      return this.unknownTag(tagName, [markup], tokens);
+    } else if (Block.isVariable.test(token.value)) {
+      return this.nodelist.push(this.createVariable(token));
     } else if (token.value.length === 0) {
-
+      // eslint disable-line no
     } else {
-      return this.nodelist.push(token.value)
+      return this.nodelist.push(token.value);
     }
   }
 
-  render (context/*: Context */) {
-    return this.renderAll(this.nodelist, context)
+  async render(context: Context) {
+    return (await this.renderAll(this.nodelist, context)).join('');
   }
-  renderAll (list/*: Array<Promise> */, context/*: Context */) {
-    const accumulator = []
-    return PromiseEach(list, token => {
-      if (token != null && typeof token.render !== 'function') {
-        accumulator.push(token)
-        return
+/*
+  renderAll(list: Promise<Tag>[] , context: Context) {
+    const accumulator: string[] = [];
+    return promiseEach(list, (token:Tag|string) => {
+      if (!(token instanceof Tag)) {
+        accumulator.push(token);
+        return;
       }
       return Promise.resolve()
-              .then(() => token.render(context))
-              .then(s => accumulator.push(s), e => accumulator.push(context.handleError(e)))
-    }).then(() => accumulator)
+      .then(() => token.render(context))
+      .then(s => accumulator.push(s), e => accumulator.push(context.handleError(e)));
+    }).then(() => accumulator);
   }
-  unknownTag (tag/*: Tag | string */, params/*: Array<any> */, tokens/*: Array<Token> */) {
+*/
+  async renderAll(list: Promise<Tag>[], context: Context): Promise<string[]> {
+    const accumulator: string[] = [];
+    return promiseEach(list, async (token: Tag | string) => {
+      if (!(token instanceof Tag)) {
+        accumulator.push(token);
+        return;
+      }
+      try {
+        const str = await token.render(context);
+        accumulator.push(str);
+      } catch (error) {
+        accumulator.push(context.handleError(error));
+      } finally {
+        return accumulator;
+      }
+    });
+  }
+  unknownTag(tag: string, params: any[], tokens: Token[]) {
+    console.error(`${this.name}: unknownTag() called with {params: "${
+      params}", tokens: "${tokens}"}`);
     if (tag === 'else') {
-      throw new SyntaxError(`${this.blockName()} tag does not expect else tag`)
+      throw new SyntaxError(`${this.blockName()} tag does not expect else tag`);
     }
     if (tag === 'end') {
-      throw new SyntaxError(`'end' is not a valid delimiter for ${this.blockName()} tags. use ${this.blockDelimiter()}`)
+      throw new SyntaxError(`'end' is not a valid delimiter for ${
+        this.blockName()} tags. use ${this.blockDelimiter()}`);
     }
-    throw new SyntaxError(`Unknown tag '${tag}'`)
+    throw new SyntaxError(`Unknown tag '${tag}'`);
   }
 }
 
-Block.IsTag = RegExp(`^${TagStart.source}`)
-Block.IsVariable = RegExp(`^${VariableStart.source}`)
-Block.FullToken = RegExp(`^${TagStart.source}\\s*(\\w+)\\s*(.*)?${TagEnd.source}$`)
-Block.ContentOfVariable = RegExp(`^${VariableStart.source}(.*)${VariableEnd.source}$`)
-export default Block
+export default Block;
+

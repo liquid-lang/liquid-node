@@ -1,72 +1,78 @@
-import Promise from 'any-promise'
-import PromiseReduce from '../../promise_reduce'
-import Block from '../block'
-import { QuotedFragment } from '../regexps'
-import { SyntaxError } from '../errors'
-import ElseCondition from '../else_condition'
-import {scan} from '../helpers'
-import Condition from '../condition'
+// @flow
+// import Promise from 'any-promise';
+import PromiseReduce from '../../promise_reduce';
+import Block from '../block';
+import { QuotedFragment } from '../regexps';
+import { SyntaxError } from '../errors';
+import ElseCondition from '../else_condition';
+import { scan } from '../helpers';
+import Condition from '../condition';
 
-const SyntaxHelp = "Syntax Error in tag 'case' - Valid syntax: case [expression]"
 
-const Syntax = RegExp(`(${QuotedFragment.source})`)
-const WhenSyntax = RegExp(`(${QuotedFragment.source})(?:(?:\\s+or\\s+|\\s*\\,\\s*)(${QuotedFragment.source}))?`)
+const SYNTAX_HELP = 'Syntax Error in tag \'case\' - Valid syntax: case [expression]';
+
+const SYNTAX = RegExp(`(${QuotedFragment.source})`);
+const WHEN_SYNTAX = RegExp(`(${
+  QuotedFragment.source})(?:(?:\\s+or\\s+|\\s*\\,\\s*)(${QuotedFragment.source}))?`);
 
 class Case extends Block {
-  blocks = []
-  markup = ''
-  constructor (template, tagName, markup) {
-    super(template)
-    const match = Syntax.exec(markup)
+  blocks: Condition[] = [];
+  nodelist: any[] = [];
+  constructor(template: Template, tagName: string, markup: string) {
+    super(template);
+    const match = SYNTAX.exec(markup);
     if (!match) {
-      throw new SyntaxError(SyntaxHelp)
+      throw new SyntaxError(SYNTAX_HELP);
     }
-    this.markup = markup
+    this.tagName = tagName;
+    this.markup = markup;
   }
-  unknownTag (tag, markup) {
+  unknownTag(tag: string, markup: string) {
     if (['when', 'else'].includes(tag)) {
-      return this.pushBlock(tag, markup)
+      this.pushBlock(tag, markup);
     }
-    return super.unknownTag(tag, markup)
+    super.unknownTag(tag, [markup].concat(''), null);
   }
-  render (context) {
-    const self = this
-    return context.stack(() => {
-      return PromiseReduce(this.blocks, (chosenBlock, block) => {
-        if (chosenBlock != null) {
-          return chosenBlock
-        }
-        return Promise.resolve()
-          .then(() => block.evaluate(context))
-          .then(ok => ok && block)
-      }, null)
-        .then((block) => {
-          if (block != null) {
-            return self.renderAll(block.attachment, context)
-          }
-          return ''
-        })
-    })
+  async render(context: Context) {
+    const caseTag = this;
+    async function stackReducer(chosenBlock: Condition, block: Condition) {
+      if (chosenBlock != null) {
+        return chosenBlock;
+      }
+      const ok = await block.evaluate(context);
+      if (ok) {
+        return block;
+      }
+      return null;
+    }
+    async function stack() {
+      const block: Condition = await PromiseReduce(caseTag.blocks, stackReducer, null);
+      if (block != null) {
+        return caseTag.renderAll(block.attachment, context);
+      }
+      return '';
+    }
+    return context.stack(stack);
   }
   // private
-  pushBlock (tag, markup) {
-    let block = null
+  pushBlock(tag: string, markup: string) {
+    let block: Condition;
+    const nodelist: any[] = [];
     if (tag === 'else') {
-      block = new ElseCondition()
-      this.blocks.push(block)
-      this.nodelist = block.attach([])
+      block = new ElseCondition();
+      this.blocks.push(block);
+      this.nodelist = block.attach([]);
     } else {
-      const expressions = scan(markup, WhenSyntax)
-      const nodelist = []
-      const self = this
-      expressions[0].forEach((value) => {
+      const expressions = scan(markup, WHEN_SYNTAX);
+      const caseTag = this;
+      expressions[0].forEach((value: any) => {
         if (value) {
-          block = new Condition(self.markup, '==', value)
-          self.blocks.push(block)
-          self.nodelist = block.attach(nodelist)
+          block = new Condition(caseTag.markup, '==', value);
+          caseTag.blocks.push(block);
+          caseTag.nodelist = block.attach(nodelist);
         }
-      })
+      });
     }
   }
 }
-export default Case
+export default Case;

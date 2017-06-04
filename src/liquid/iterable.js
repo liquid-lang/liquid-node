@@ -1,64 +1,66 @@
 // @flow
-import Range from './range'
-import Promise from 'any-promise'
 
-const isString = (input: mixed): boolean => Object.prototype.toString.call(input) === '[object String]'
+import Range from './range';
 
-export default class Iterable<T> {
-  first (): Promise<T> {
-    return this.slice(0, 1).then(a => a[0])
+const isString = (input: any): boolean => Object.prototype
+                  .toString.call(input) === '[object String]';
+
+export default class Iterable<T: (number[] | string)> {
+  async first() {
+    return this.slice(0, 1).then(a => a[0]);
   }
 
-  map (...args: Array<mixed | Function>): Promise<T> {
-    return this.toArray().then(a => Promise.all(a.map(...args)))
+  async map(...args: (any | Function)[]) {
+    const a = await this.toArray();
+    return args.map(func => func(a));
   }
 
-  sort (...args: Array<mixed | Function>): Promise<T> {
-    return this.toArray().then(a => a.sort(...args))
+  async sort(...args: any[]) {
+    return this.toArray().then(a => a.sort(...args));
   }
 
-  toArray (): Promise<T> {
-    return Promise.resolve(this.slice(0))
+  async toArray() {
+    return this.slice(0);
   }
 
-  slice () {
-    throw new Error(`${this.constructor.name}.slice() not implemented`)
+  async slice(...args: number[]): Promise<T[]> {
+    throw new Error(`${this.constructor.name}.slice() not implemented`);
   }
 
-  last () {
-    throw new Error(`${this.constructor.name}.last() not implemented`)
+  async last(): Promise<T> {
+    throw new Error(`${this.constructor.name}.last() not implemented`);
   }
 
-  static cast (v/*: any | Array<mixed> */) {
+  static async cast(v: any) {
     if (v instanceof Iterable) {
-      return v
+      return v;
     }
     if (v instanceof Range) {
-      return new IterableForArray(v.toArray())
+      return new IterableForArray(v.toArray());
     }
     if (Array.isArray(v)) {
-      return new IterableForArray(v)
+      return new IterableForArray(v);
     }
     if (isString(v)) {
-      return new IterableForArray((v: string).split(''))
+      return new IterableForArray((v: string).split(''));
     }
     if (v != null) {
-      return new IterableForArray([v])
+      return new IterableForArray([v]);
     }
-    return new IterableForArray([])
+    return new IterableForArray([]);
   }
 }
 
-export class IterableForArray<T> extends Iterable<T> {
-  array: Array<T>
-  constructor (array/*: Array<T> */) {
-    super()
-    this.array = array
+export class IterableForArray<T : (string | number[])> extends Iterable <T> {
+  array: T[];
+  constructor(array: T[]) {
+    super();
+    this.array = array;
   }
-  slice (...args/*: Array<number> */) {
-    return Promise.resolve(this.array.slice(...args))
+  async slice(...args: number[]) {
+    return this.array.slice(args[0], args[1]);
   }
-  last (): Promise<T> {
-    return Promise.resolve(this.array[this.array.length - 1])
+  async last() {
+    return this.array[this.array.length - 1];
   }
 }

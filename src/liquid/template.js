@@ -1,101 +1,109 @@
-import Promise from 'any-promise'
-
-import Context from './context'
-import Document from './document'
-import {toFlatString} from './helpers'
-import {TemplateParser} from './regexps'
+// @flow
+import Context from './context';
+import Document from './document';
+import Engine from './engine';
+import Tag from './tag';
+import { TemplateParser } from './regexps';
 
 export default class Template {
-  constructor () {
-    this.registers = {}
-    this.assigns = {}
-    this.instanceAssigns = {}
-    this.tags = new Map()
-    this.errors = []
-    this.rethrowErrors = true
-  }
+  engine: Engine;
+  registers: Map<string, object> = new Map();
+  assigns: Map<string, object> = new Map();
+  root: any; // actually Document, but may be causing a dep circle
+  instanceAssigns: Map<string, any> = new Map();
+
+  errors: Error[] = [];
+  rethrowErrors = true;
+
+  tags: Map<string, Tag> = new Map();
+
+  constructor() {
+    this.engine = new Engine();
+  } 
   /**
    * Parse source code
    * @param  {Engine} engine      The engine to run on
    * @param  {String} [source=''] the source code to run through the engine
    * @return {this}               returns `this` for easy chaining
    */
-  parse (engine, source = '') {
-    this.engine = engine
-    const self = this
-    return Promise.resolve().then(() => {
-      const tokens = self._tokenize(source)
-      self.tags = self.engine.tags
-      self.root = new Document(self)
-      return self.root.parseWithCallbacks(...tokens).then(() => self)
-    })
+  async parse(engine: Engine, source = '') {
+    this.engine = engine;
+    this.root = new Document(this);
+    this.tags = this.engine.tags;
+    const tokens = Template.tokenize(source);
+    await this.root.parseWithCallbacks(...tokens);
+    return this;
   }
   /**
    * Uses the <tt>Liquid::TemplateParser</tt> regexp to tokenize the passed source
    * @param  {String} source The source to tokenize
-   * @return {Array<Token>}
+   * @return {Token[]}
    */
-  _tokenize (source) {
-    source = String(source)
+  static tokenize(src: string) {
+    const source = String(src);
     if (source.length === 0) {
-      return []
+      return [];
     }
-    const tokens = source.split(TemplateParser)
+    const tokens = source.split(TemplateParser);
 
-    let line = 1
-    let col = 1
+    let line = 1;
+    let col = 1;
 
     return tokens.filter(token => token.length > 0)
-      .map(value => {
-        const result = { value, col, line }
+      .map((value) => {
+        const result = { value, col, line };
         if (!value.includes('\n')) {
-          col += value.length
+          col += value.length;
         } else {
-          const linebreaks = value.split('\n').length - 1
-          line += linebreaks
-          col = value.length - value.lastIndexOf('\n')
+          const linebreaks = value.split('\n').length - 1;
+          line += linebreaks;
+          col = value.length - value.lastIndexOf('\n');
         }
-        return result
-      })
+        return result;
+      });
   }
-  render (...args) {
-    const self = this
-    return Promise.resolve().then(() => self._render(...args))
+  async render(...args: any[]) {
+    return this.internalRender(...args);
   }
-  _render ({assigns, options}) {
+  async internalRender({ assigns, options }: { assigns: any, options: any }
+                    = { assigns: null, options: null }) {
     if (!(this.root instanceof Document)) {
-      throw new Error('No document root. Did you parse the document yet?')
+      throw new Error('No document root. Did you parse the document yet?');
     }
-    let context
+    const self = this;
+    let context: Context;
     if (assigns instanceof Context) {
-      context = assigns
+      context = assigns;
     } else if (assigns instanceof Object) {
-      assigns = [assigns, this.assigns]
-      context = new Context(this.engine, assigns, this.instanceAssigns, this.registers, this.rethrowErrors)
+      const tmpAssigns = [assigns, this.assigns];
+      context = new Context(this.engine, tmpAssigns, this.instanceAssigns,
+                            this.registers, this.rethrowErrors);
     } else if (assigns == null) {
-      context = new Context(this.engine, this.assigns, this.instanceAssigns, this.registers, this.rethrowErrors)
+      context = new Context(this.engine, [this.assigns], this.instanceAssigns,
+                            this.registers, this.rethrowErrors);
     } else {
-      throw new Error(`Expected Object or Liquid::Context as parameter, but was ${typeof assigns}.`)
+      throw new Error(`Expected Object or Liquid::Context as parameter, but was ${
+          typeof assigns}.`);
     }
     if (options != null) {
       if (options.registers) {
-        const registers = Object.assign({}, this.registers, options.registers)
-        this.registers = registers
+        Object.entries(options.registers).map(([k, v]) => self.registers.set(k, v));
       }
       if (options.filters) {
-        context.registerFilters(options.filters)
+        context.registerFilters(options.filters);
       }
-      const copyErrors = (actualResult) => {
-        self.errors = context.errors
-        return actualResult
-      }
-      return this.root.render(context)
-        .then(chunks => toFlatString(chunks))
-        .then((result) => copyErrors(result))
-        .catch((error) => {
-          self.errors = context.errors
-          throw error
-        })
+    }
+    try {
+      const result = await this.root.render(context);
+      return this.copyErrors(result, context);
+    } catch (error) {
+      this.errors = context.errors;
+      throw error;
     }
   }
+  copyErrors(actualResult: string, context: Context) {
+    this.errors = context.errors;
+    return actualResult;
+  }
 }
+

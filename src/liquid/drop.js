@@ -28,47 +28,45 @@
 class Drop {
   context = null
 
-  beforeMethod (method) {}
+  beforeMethod(method) {}
 
-  get (methodOrKey) {
-    return this.invokeDrop(methodOrKey)
+  get(methodOrKey) {
+    return this.invokeDrop(methodOrKey);
   }
-  hasKey (key) {
-    return true
+  hasKey(key) {
+    return true;
   }
-  has (key) {
-    this.hasKey(key)
+  has(key) {
+    this.hasKey(key);
   }
-  invokeDrop (methodOrKey) {
+  invokeDrop(methodOrKey) {
     if (this.constructor.isInvokable(methodOrKey)) {
-      const value = this[methodOrKey]
+      const value = this[methodOrKey];
       if (typeof value === 'function') {
-        return value.call(this)
-      } else {
-        return value
+        return value.call(this);
       }
-    } else {
-      return this.beforeMethod(methodOrKey)
+      return value;
     }
+    return this.beforeMethod(methodOrKey);
   }
-  static isInvokable (method) {
-    const self = this
+  static isInvokable(method) {
+    const self = this;
     if (!this.invokableMethods) {
       this.invokableMethods = (() => {
-        const blacklist = Object.keys(Drop.prototype)
-        const whitelist = ['toLiquid']
-        Object.keys(self.prototype).forEach(k => {
+        const blacklist = Object.keys(Drop.prototype);
+        const whitelist = ['toLiquid'];
+        Object.keys(self.prototype).forEach((k) => {
           if (!blacklist.includes(k)) {
-            whitelist.push(k)
+            whitelist.push(k);
           }
-        })
-        return whitelist
-      })()
+        });
+        return whitelist;
+      })();
     }
-    return this.invokableMethods.includes(method)
+    return this.invokableMethods.includes(method);
   }
-  toLiquid () { return this }
-  toString () { return `[Liquid.Drop ${this.constructor.name}]` }
+  toLiquid() { return this; }
+  toString() { return `[Liquid.Drop ${this.constructor.name}]`; }
 }
 
-export default Drop
+export default Drop;

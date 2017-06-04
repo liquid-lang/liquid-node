@@ -1,24 +1,21 @@
 // @flow
-import Promise from 'any-promise'
-import Context from '../context'
-import Block from '../block'
-import {toFlatString} from '../helpers'
+import Context from '../context';
+import Block from '../block';
+import { toFlatString } from '../helpers';
 
 class IfChanged extends Block {
-  render (context: Context): string {
-    const self = this
-    return context.stack(() => {
-      const rendered = self.renderAll(self.nodelist, context)
-      return Promise.resolve(rendered).then((output) => {
-        output = toFlatString(output)
-        if (output !== context.registers.ifchanged) {
-          context.registers.ifchanged = output
-          return output
-        }
-        return ''
-      })
-    })
+  async render(context: Context) {
+    const rendered = await this.renderAll(this.nodelist, context);
+    function stack() {
+      const output = toFlatString(rendered);
+      if (context.registers.get('ifchanged') !== output) {
+        context.registers.set('ifchanged', output);
+        return output;
+      }
+      return '';
+    }
+    return context.stack(stack);
   }
 }
 
-export default IfChanged
+export default IfChanged;
