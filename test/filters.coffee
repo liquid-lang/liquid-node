@@ -1,5 +1,5 @@
 Liquid = requireLiquid()
-Promise = require "native-or-bluebird"
+Promise = require "any-promise"
 strftime = require "strftime"
 
 describe "StandardFilters", ->

@@ -1,4 +1,4 @@
-Promise = require "native-or-bluebird"
+Promise = require "any-promise"
 
 
 reduce = (collection, reducer, value) ->

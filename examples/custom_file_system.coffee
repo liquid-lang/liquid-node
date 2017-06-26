@@ -1,4 +1,4 @@
-Promise = require 'native-or-bluebird'
+Promise = require 'any-promise'
 Liquid = require('../src')
 
 class CustomFileSystem extends Liquid.BlankFileSystem
