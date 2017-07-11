@@ -1,6 +1,5 @@
 Liquid = require("../liquid")
 util = require "util"
-Promise = require "any-promise"
 
 # Iterates over promises sequentially
 Promise_each = (promises, cb) ->

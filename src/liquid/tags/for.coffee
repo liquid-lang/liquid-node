@@ -1,5 +1,4 @@
 Liquid = require "../../liquid"
-Promise = require "any-promise"
 PromiseReduce = require "../../promise_reduce"
 Iterable = require "../iterable"
 

@@ -1,5 +1,4 @@
 Range = require "./range"
-Promise = require "any-promise"
 
 isString = (input) ->
   Object::toString.call(input) is "[object String]"

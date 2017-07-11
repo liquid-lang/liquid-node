@@ -1,5 +1,4 @@
 Liquid = require "../liquid"
-Promise = require "any-promise"
 Fs = require "fs"
 Path = require "path"
 

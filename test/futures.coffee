@@ -1,5 +1,4 @@
 Liquid = requireLiquid()
-Promise = require "any-promise"
 
 asyncResult = (result, delay = 1) ->
   new Promise (resolve) ->

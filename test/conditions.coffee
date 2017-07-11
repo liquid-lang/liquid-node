@@ -1,5 +1,4 @@
 Liquid = requireLiquid()
-Promise = require "any-promise"
 
 describe "Liquid.Condition", ->
 

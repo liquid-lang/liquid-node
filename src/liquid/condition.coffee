@@ -1,5 +1,4 @@
 Liquid = require "../liquid"
-Promise = require "any-promise"
 
 # Container for liquid nodes which conveniently wraps decision making logic
 #

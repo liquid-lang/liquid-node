@@ -1,5 +1,3 @@
-Promise = require "any-promise"
-
 module.exports = class Tag
   constructor: (@template, @tagName, @markup) ->
 

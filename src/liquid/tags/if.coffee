@@ -1,5 +1,4 @@
 Liquid = require "../../liquid"
-Promise = require "any-promise"
 PromiseReduce = require "../../promise_reduce"
 
 module.exports = class If extends Liquid.Block

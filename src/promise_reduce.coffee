@@ -1,5 +1,3 @@
-Promise = require "any-promise"
-
 
 reduce = (collection, reducer, value) ->
   Promise.all(collection).then (items) ->

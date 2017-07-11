@@ -1,5 +1,4 @@
 strftime = require "strftime"
-Promise = require "any-promise"
 Iterable = require "./iterable"
 { flatten } = require "./helpers"
 

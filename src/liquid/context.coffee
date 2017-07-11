@@ -1,5 +1,4 @@
 Liquid = require "../liquid"
-Promise = require "any-promise"
 
 module.exports = class Context
 
