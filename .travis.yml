@@ -1,12 +1,9 @@
 language: node_js
 
 node_js:
+  - 8
+  - 6
   - 4
-  - 3
-  - 2
-  - 1
-  - 0.12
-  - "0.10"
 
 env:
   global:
@@ -25,8 +22,3 @@ script: ./scripts/run-tests.sh
 
 sudo: false
 
-matrix:
-  fast_finish: true
-  exclude:
-    - node_js: "0.10"
-      env: PROMISES=native
