@@ -16,7 +16,6 @@
 
 - Supports asynchronous variables, tags, functions and filters (helpers)
 - Allows you to add custom tags and filters easily
-- Uses [bluebird](https://github.com/petkaantonov/bluebird) for super-fast [Promises/A+](http://promisesaplus.com/)
 - Supports full liquid syntax
 - Based on original Ruby code
 - Written in CoffeeScript
