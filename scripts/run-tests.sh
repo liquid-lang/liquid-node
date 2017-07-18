@@ -4,7 +4,7 @@ set -euo pipefail
 
 npm test
 
-if [ "${TRAVIS_NODE_VERSION}" = "4" ] && [ "${PROMISES}" = "native" ]; then
+if [ "${TRAVIS_NODE_VERSION}" = "4" ] then
   npm run coverage
   npm run lint
 else

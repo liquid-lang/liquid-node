@@ -9,15 +9,11 @@ env:
   global:
     - export COVERALLS_SERVICE_NAME=travis-ci
     - export COVERALLS_REPO_TOKEN=wEPmOB8VfKBdChU8hQ9tv9LfkeQHRl16D
-  matrix:
-    - PROMISES=native
-    - PROMISES=bluebird
 
 branches:
   only:
     - master
 
-before_install: ./scripts/before-install.sh
 script: ./scripts/run-tests.sh
 
 sudo: false
