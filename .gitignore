@@ -1,8 +1,5 @@
-/node_modules
-/lib
-/dist
-/docs
-*.sublime*
-.idea
+.env
+.npmrc
+node_modules
 covreporter.html
 npm-debug.log

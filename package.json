@@ -1,39 +1,19 @@
 {
-  "name": "liquid-node",
-  "author": "Marcel Jackwerth <marceljackwerth@gmail.com>",
-  "contributors": [
-    {
-      "name": "Tony Heupel",
-      "email": "tonyheupel@gmail.com"
-    },
-    {
-      "name": "Henry Bergius",
-      "email": "henri.bergius@iki.fi"
-    },
-    {
-      "name": "Chen Yicai"
-    }
-  ],
-  "description": "Node.js port of Tobias Lütke's Liquid template engine.",
-  "version": "3.0.0",
+  "name": "liquid",
+  "description": "Node.js port of the Liquid template engine",
+  "version": "4.0.0",
   "license": "MIT",
-  "homepage": "https://github.com/sirlantis/liquid-node",
-  "bugs": "https://github.com/sirlantis/liquid-node/issues",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/sirlantis/liquid-node.git"
-  },
+  "homepage": "https://github.com/liquid-lang/liquid-node",
   "keywords": [
     "liquid",
+    "jekyll",
     "template",
+    "templating",
     "jinja"
   ],
-  "directories": {
-    "lib": "./lib"
-  },
   "main": "./lib/index.js",
   "engines": {
-    "node": ">=4"
+    "node": ">=8"
   },
   "dependencies": {
     "strftime": "~0.9.2"
@@ -41,22 +21,30 @@
   "devDependencies": {
     "chai": "~3.5.0",
     "chai-as-promised": "~5.3.0",
-    "coffee-script": "~1.10.0",
-    "coffeelint": "^1.11.1",
     "coveralls": "^2.11.4",
     "jscoverage": "^0.6.0",
     "mocha": "~2.5.3",
     "mocha-lcov-reporter": "1.2.0",
     "sinon": "^1.16.1",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "standard": "^12.0.1",
+    "standard-markdown": "^5.0.1"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register -R spec test",
-    "compile": "rm -rf lib && coffee --output lib --map --compile src",
-    "prepublish": "npm run precommit && npm run compile",
+    "test": "mocha -R spec test",
     "precommit": "npm test && npm run lint",
-    "coverage": "npm run compile && LIQUID_NODE_COVERAGE=1 mocha --compilers coffee:coffee-script/register -r jscoverage --reporter mocha-lcov-reporter test | coveralls",
-    "coverage-report": "npm run compile && LIQUID_NODE_COVERAGE=1 mocha --compilers coffee:coffee-script/register -r jscoverage --covout html test",
-    "lint": "coffeelint src/** test/**"
+    "coverage": "LIQUID_NODE_COVERAGE=1 mocha -r jscoverage --reporter mocha-lcov-reporter test | coveralls",
+    "coverage-report": "LIQUID_NODE_COVERAGE=1 mocha -r jscoverage --covout html test",
+    "lint": "standard --fix && standard-markdown"
+  },
+  "standard": {
+    "globals": [
+      "expect",
+      "renderTest",
+      "requireLiquid"
+    ],
+    "env": [
+      "mocha"
+    ]
   }
 }

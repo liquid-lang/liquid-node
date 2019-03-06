@@ -1,6 +1,0 @@
-# include: lib
-test/
-.DS_Store
-.travis.yml
-TODO.md
-History.md

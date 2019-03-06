@@ -53,7 +53,7 @@ and it was never tested. This has changed with 2.0.0.
 
 In 1.x the template "{{ user.save }}" with the variable configuration
 
-```javascript
+```
 variables =
   user:
     save: ->

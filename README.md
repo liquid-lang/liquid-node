@@ -18,7 +18,6 @@
 - Allows you to add custom tags and filters easily
 - Supports full liquid syntax
 - Based on original Ruby code
-- Written in CoffeeScript
 - High test coverage
 
 ## What does it look like?
@@ -38,8 +37,8 @@
 
 ## Installation
 
-```
-npm install liquid-node --save
+```sh
+npm install liquid
 ```
 
 ## Usage
@@ -47,66 +46,66 @@ npm install liquid-node --save
 Liquid supports a very simple API based around the Liquid.Engine class.
 For standard use you can just pass it the content of a file and call render with an object.
 
-```javascript
-Liquid = require("liquid-node")
-var engine = new Liquid.Engine
+```js
+Liquid = require('liquid')
+const engine = new Liquid.Engine()
 
 engine
-  .parse("hi {{name}}")
-  .then(function(template) { return template.render({ name: "tobi" }); })
-  .then(function(result) { console.log(result) });
-  
+  .parse('hi {{name}}')
+  .then(template => template.render({ name: 'tobi' }))
+  .then(result => console.log(result))
+
 // or
 
 engine
-  .parseAndRender("hi {{name}}", { name: "tobi" })
-  .then(function(result) { console.log(result) });
+  .parseAndRender('hi {{name}}', { name: 'tobi' })
+  .then(result => console.log(result))
 ```
 
 ### Usage with Connect
 
-```javascript
-app.get(function(req, res) {
+```js
+app.get((req, res, next) => {
   engine
-    .parseAndRender("hi {{name}}", { name: "tobi" })
-    .nodeify(function(err, result) {
+    .parseAndRender('hi {{name}}', { name: 'tobi' })
+    .nodeify((err, result) => {
       if (err) {
-        res.end("ERROR: " + err);
+        res.end('ERROR: ' + err)
       } else {
-        res.end(result);
+        res.end(result)
       }
-    });
-});
+    })
+})
 ```
 
-### Registration of new filters
+### Registering new filters
 
 ```javascript
 engine.registerFilters({
-  myFilter: function(input) {
+  myFilter: input => {
     return String(input).toUpperCase()
   }
-});
+})
 ```
 
-### Registration of new Tags
+### Registering new tags
 
-Since the code is based on the Ruby implementation we use CoffeeScript's `class`
-which is a little bit difficult to write in pure JavaScript.
-Take a look at the [existing tags](https://github.com/sirlantis/liquid-node/tree/master/src/liquid/tags)
+Take a look at the [existing tags](https://github.com/sirlantis/liquid-node/tree/master/lib/liquid/tags)
 to see how to implement them.
 
-```coffeescript
-class MyTag extends Liquid.Tag
-  render: ->
-    "that's me!"
-    
-engine.registerTag "MyTag", MyTag
+```js
+class MyTag extends Liquid.Tag {
+  render () {
+    return 'hello world'
+  }
+}
+
+engine.registerTag('MyTag', MyTag)
 ```
 
-## How to run the tests
+## Tests
 
-```
+```sh
 npm test
 ```
 
@@ -117,4 +116,4 @@ npm test
 
 ## License
 
-LiquidNode is released under the [MIT license](http://www.opensource.org/licenses/MIT).
+[MIT](http://www.opensource.org/licenses/MIT)
