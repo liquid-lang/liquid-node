@@ -1,26 +1,14 @@
 {
   "name": "liquid",
-  "author": "Marcel Jackwerth <marceljackwerth@gmail.com>",
-  "contributors": [
-    {
-      "name": "Tony Heupel",
-      "email": "tonyheupel@gmail.com"
-    },
-    {
-      "name": "Henry Bergius",
-      "email": "henri.bergius@iki.fi"
-    },
-    {
-      "name": "Chen Yicai"
-    }
-  ],
-  "description": "Node.js port of Tobias Lütke's Liquid template engine.",
-  "version": "3.0.0",
+  "description": "Node.js port of the Liquid template engine",
+  "version": "4.0.0",
   "license": "MIT",
-  "homepage": "https://github.com/sirlantis/liquid-node",
+  "homepage": "https://github.com/liquid-lang/liquid-node",
   "keywords": [
     "liquid",
+    "jekyll",
     "template",
+    "templating",
     "jinja"
   ],
   "main": "./lib/index.js",
