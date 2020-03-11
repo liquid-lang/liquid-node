@@ -15,7 +15,8 @@
 ## Features
 
 - Supports asynchronous variables, tags, functions and filters (helpers)
-- Allows you to add custom tags and filters easily
+- Supports [whitespace control](https://shopify.github.io/liquid/basics/whitespace/)
+- Allows custom tags and filters to be added
 - Supports full liquid syntax
 - Based on original Ruby code
 - High test coverage
