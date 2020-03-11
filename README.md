@@ -48,7 +48,7 @@ Liquid supports a very simple API based around the Liquid.Engine class.
 For standard use you can just pass it the content of a file and call render with an object.
 
 ```js
-Liquid = require('liquid')
+const Liquid = require('liquid')
 const engine = new Liquid.Engine()
 
 engine
