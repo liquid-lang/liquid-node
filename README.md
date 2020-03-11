@@ -15,7 +15,8 @@
 ## Features
 
 - Supports asynchronous variables, tags, functions and filters (helpers)
-- Allows you to add custom tags and filters easily
+- Supports [whitespace control](https://shopify.github.io/liquid/basics/whitespace/)
+- Allows custom tags and filters to be added
 - Supports full liquid syntax
 - Based on original Ruby code
 - High test coverage
@@ -47,7 +48,7 @@ Liquid supports a very simple API based around the Liquid.Engine class.
 For standard use you can just pass it the content of a file and call render with an object.
 
 ```js
-Liquid = require('liquid')
+const Liquid = require('liquid')
 const engine = new Liquid.Engine()
 
 engine
@@ -111,6 +112,7 @@ npm test
 
 ## Similar libraries
 
+* [harttle/liquidjs](https://github.com/harttle/liquidjs) (`liquidjs` on npm) is another actively maintained Liquid parser and render for Node.js
 * [darthapo's Liquid.js](https://github.com/darthapo/liquid.js) is liquid ported to JavaScript to be run within the browser. It doesn't handle asynchrony.
 * [tchype's Liquid.js](https://github.com/tchype/liquid.js) is `liquid-node` wrapped to run in a browser.
 

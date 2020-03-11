@@ -18,6 +18,38 @@ describe('Liquid', function () {
       return expect(this.engine.parse('foo')).to.be.fulfilled.then(template => expect(template.root.nodelist).to.deep.equal(['foo']))
     })
 
+    context('whitespace control', function () {
+      it('leaves whitespace as-is', function () {
+        return expect(this.engine.parseAndRender('{% unless foo %}\nyes\n{% endunless %}')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('\nyes\n')
+        })
+      })
+
+      it('removes whitespace preceding a `{%- ` tag', function () {
+        return expect(this.engine.parseAndRender('{% unless foo %}\nyes\n{%- endunless %}')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('\nyes')
+        })
+      })
+      
+      it('removes whitespace following a `-%}` tag', function () {
+        return expect(this.engine.parseAndRender('{% unless foo -%}\nyes\n{% endunless %}')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('yes\n')
+        })
+      })
+
+      it('removes whitespace preceding and following tags', function () {
+        return expect(this.engine.parseAndRender('a\n{%- unless foo -%}\nb\n{%- endunless -%}c')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('abc')
+        })
+      })
+
+      it('works for variable tags', function () {
+        return expect(this.engine.parseAndRender('x\n{{- foo -}}\nz', {foo: 'y'})).to.be.fulfilled.then(output => {
+          expect(output).to.equal('xyz')
+        })
+      })
+    })
+
     it('parses variables', function () {
       return expect(this.engine.parse('{{ foo }}')).to.be.fulfilled.then(template => expect(template.root.nodelist[0]).to.be.instanceOf(Liquid.Variable))
     })
