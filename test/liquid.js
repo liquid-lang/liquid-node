@@ -25,21 +25,15 @@ describe('Liquid', function () {
         })
       })
 
-      it('removes leading whitespace', function () {
+      it('removes whitespace preceding a `{%- ` tag', function () {
         return expect(this.engine.parseAndRender('{% unless foo %}\nyes\n{%- endunless %}')).to.be.fulfilled.then(output => {
           expect(output).to.equal('\nyes')
         })
       })
-
-      it('removes whitespace preceding a `{%- ` tag', function () {
+      
+      it('removes whitespace following a `-%}` tag', function () {
         return expect(this.engine.parseAndRender('{% unless foo -%}\nyes\n{% endunless %}')).to.be.fulfilled.then(output => {
           expect(output).to.equal('yes\n')
-        })
-      })
-
-      it('removes whitespace following a `-%}` tag', function () {
-        return expect(this.engine.parseAndRender('{% unless foo -%}\nyes\n{%- endunless %}')).to.be.fulfilled.then(output => {
-          expect(output).to.equal('yes')
         })
       })
 
