@@ -112,6 +112,7 @@ npm test
 
 ## Similar libraries
 
+* [harttle/liquidjs](https://github.com/harttle/liquidjs) (`liquidjs` on npm) is another actively maintained Liquid parser and render for Node.js
 * [darthapo's Liquid.js](https://github.com/darthapo/liquid.js) is liquid ported to JavaScript to be run within the browser. It doesn't handle asynchrony.
 * [tchype's Liquid.js](https://github.com/tchype/liquid.js) is `liquid-node` wrapped to run in a browser.
 
