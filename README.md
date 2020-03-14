@@ -1,6 +1,6 @@
 # Liquid with Node.js
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![NPM version](https://img.shields.io/npm/v/liquid-node.svg?style=flat)](https://www.npmjs.org/package/liquid-node)
@@ -134,6 +134,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="http://twitter.com/sirlantis"><img src="https://avatars1.githubusercontent.com/u/56807?v=4" width="100px;" alt=""/><br /><sub><b>Marcel Jackwerth</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=sirlantis" title="Code">💻</a> <a href="https://github.com/docs/liquid/commits?author=sirlantis" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/tchype"><img src="https://avatars0.githubusercontent.com/u/236453?v=4" width="100px;" alt=""/><br /><sub><b>Tony C. Heupel</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=tchype" title="Code">💻</a></td>
+    <td align="center"><a href="http://cyj.me/"><img src="https://avatars0.githubusercontent.com/u/252317?v=4" width="100px;" alt=""/><br /><sub><b>Chen Yangjian</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=cyjake" title="Code">💻</a></td>
   </tr>
 </table>
 
