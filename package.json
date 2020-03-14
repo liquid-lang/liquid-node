@@ -3,7 +3,7 @@
   "description": "Node.js port of the Liquid template engine",
   "version": "4.0.0",
   "license": "MIT",
-  "homepage": "https://github.com/liquid-lang/liquid-node",
+  "homepage": "https://github.com/docs/liquid",
   "keywords": [
     "liquid",
     "jekyll",
