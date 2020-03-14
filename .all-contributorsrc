@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "sirlantis",
+      "name": "Marcel Jackwerth",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/56807?v=4",
+      "profile": "http://twitter.com/sirlantis",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "liquid",
+  "projectOwner": "docs",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
