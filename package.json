@@ -1,7 +1,7 @@
 {
   "name": "liquid",
   "description": "Node.js port of the Liquid template engine",
-  "version": "4.0.0",
+  "version": "0.0.0-development",
   "license": "MIT",
   "homepage": "https://github.com/docs/liquid",
   "keywords": [
@@ -25,6 +25,7 @@
     "jscoverage": "^0.6.0",
     "mocha": "~2.5.3",
     "mocha-lcov-reporter": "1.2.0",
+    "semantic-release": "^17.0.4",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.8.0",
     "standard": "^12.0.1",
