@@ -97,6 +97,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "zeke",
+      "name": "Zeke Sikelianos",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2289?v=4",
+      "profile": "http://zeke.sikelianos.com",
+      "contributions": [
+        "code",
+        "doc",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
