@@ -1,7 +1,6 @@
 # Liquid with Node.js
 
-> This is a port of the original Liquid template engine from *Ruby* to *Node.js*.
-> It uses Promises to support non-blocking/asynchronous variables, filters, and blocks.
+This is a port of the original Liquid template engine from *Ruby* to *Node.js*. It uses Promises to support non-blocking/asynchronous variables, filters, and blocks.
 
 ## Features
 
