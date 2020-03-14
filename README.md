@@ -1,6 +1,6 @@
 # Liquid with Node.js
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![NPM version](https://img.shields.io/npm/v/liquid-node.svg?style=flat)](https://www.npmjs.org/package/liquid-node)
@@ -137,6 +137,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://cyj.me/"><img src="https://avatars0.githubusercontent.com/u/252317?v=4" width="100px;" alt=""/><br /><sub><b>Chen Yangjian</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=cyjake" title="Code">💻</a></td>
     <td align="center"><a href="https://bergie.iki.fi/"><img src="https://avatars1.githubusercontent.com/u/3346?v=4" width="100px;" alt=""/><br /><sub><b>Henri Bergius</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=bergie" title="Code">💻</a></td>
     <td align="center"><a href="https://samtiffin.com"><img src="https://avatars2.githubusercontent.com/u/4738037?v=4" width="100px;" alt=""/><br /><sub><b>Sam Tiffin</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=samtiffin" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/kmctown"><img src="https://avatars0.githubusercontent.com/u/1482857?v=4" width="100px;" alt=""/><br /><sub><b>Kris Ciccarello</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=kmctown" title="Code">💻</a></td>
   </tr>
 </table>
 
