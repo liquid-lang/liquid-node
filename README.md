@@ -1,6 +1,6 @@
 # Liquid with Node.js
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![NPM version](https://img.shields.io/npm/v/liquid-node.svg?style=flat)](https://www.npmjs.org/package/liquid-node)
@@ -144,6 +144,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://www.sebastianseilund.com"><img src="https://avatars3.githubusercontent.com/u/744493?v=4" width="100px;" alt=""/><br /><sub><b>Sebastian Seilund</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=sebastianseilund" title="Code">💻</a></td>
     <td align="center"><a href="https://robloach.net"><img src="https://avatars1.githubusercontent.com/u/25086?v=4" width="100px;" alt=""/><br /><sub><b>Rob Loach</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=RobLoach" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/sarahs"><img src="https://avatars3.githubusercontent.com/u/821071?v=4" width="100px;" alt=""/><br /><sub><b>Sarah Schneider</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=sarahs" title="Code">💻</a></td>
+    <td align="center"><a href="http://zeke.sikelianos.com"><img src="https://avatars1.githubusercontent.com/u/2289?v=4" width="100px;" alt=""/><br /><sub><b>Zeke Sikelianos</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=zeke" title="Code">💻</a> <a href="https://github.com/docs/liquid/commits?author=zeke" title="Documentation">📖</a> <a href="#maintenance-zeke" title="Maintenance">🚧</a></td>
   </tr>
 </table>
 
