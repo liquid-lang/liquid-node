@@ -53,7 +53,7 @@ engine
   .then(result => console.log(result))
 ```
 
-### Usage with Connect
+### Usage with Connect and Express
 
 ```js
 app.get((req, res, next) => {
