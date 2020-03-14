@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-  - 10
-  - 8
-env:
-  global:
-    - export COVERALLS_SERVICE_NAME=travis-ci
-    - export COVERALLS_REPO_TOKEN=wEPmOB8VfKBdChU8hQ9tv9LfkeQHRl16D
-sudo: false
