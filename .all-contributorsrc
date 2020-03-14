@@ -59,6 +59,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "swashcap",
+      "name": "Cory Reed",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1858316?v=4",
+      "profile": "http://www.swashcap.com/",
+      "contributions": [
+        "code",
+        "example",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
