@@ -1,6 +1,6 @@
 # Liquid with Node.js
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![NPM version](https://img.shields.io/npm/v/liquid-node.svg?style=flat)](https://www.npmjs.org/package/liquid-node)
@@ -139,6 +139,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://samtiffin.com"><img src="https://avatars2.githubusercontent.com/u/4738037?v=4" width="100px;" alt=""/><br /><sub><b>Sam Tiffin</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=samtiffin" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/kmctown"><img src="https://avatars0.githubusercontent.com/u/1482857?v=4" width="100px;" alt=""/><br /><sub><b>Kris Ciccarello</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=kmctown" title="Code">💻</a></td>
     <td align="center"><a href="http://www.swashcap.com/"><img src="https://avatars1.githubusercontent.com/u/1858316?v=4" width="100px;" alt=""/><br /><sub><b>Cory Reed</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=swashcap" title="Code">💻</a> <a href="#example-swashcap" title="Examples">💡</a> <a href="https://github.com/docs/liquid/commits?author=swashcap" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://www.sebastianseilund.com"><img src="https://avatars3.githubusercontent.com/u/744493?v=4" width="100px;" alt=""/><br /><sub><b>Sebastian Seilund</b></sub></a><br /><a href="https://github.com/docs/liquid/commits?author=sebastianseilund" title="Code">💻</a></td>
   </tr>
 </table>
 

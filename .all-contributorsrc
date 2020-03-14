@@ -70,6 +70,15 @@
         "example",
         "doc"
       ]
+    },
+    {
+      "login": "sebastianseilund",
+      "name": "Sebastian Seilund",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/744493?v=4",
+      "profile": "http://www.sebastianseilund.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
