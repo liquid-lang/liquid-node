@@ -88,6 +88,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sarahs",
+      "name": "Sarah Schneider",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/821071?v=4",
+      "profile": "https://github.com/sarahs",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
