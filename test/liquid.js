@@ -149,6 +149,18 @@ describe('Liquid', function () {
     })
   })
 
+  context('reports correct line numbers', function () {
+    it('at beginning of line', function () {
+      return expect(this.engine.parse('test\ntest\n{% illegal %}')).to.be.rejectedWith(Liquid.SyntaxError,
+        "Unknown tag 'illegal'\n    at {% illegal %} (undefined:3:1)")
+    })
+
+    it('in the middle of a line', function () {
+      return expect(this.engine.parse('test\n\n\ntest\ntest\n {% illegal %}\ntest')).to.be.rejectedWith(Liquid.SyntaxError,
+        "Unknown tag 'illegal'\n    at {% illegal %} (undefined:6:2)")
+    })
+  })
+
   return context('template', () =>
     context('.render()', function () {
       it('fails unless parsed', function () {
