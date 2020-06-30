@@ -18,6 +18,15 @@ describe('Liquid', function () {
       return expect(this.engine.parse('foo')).to.be.fulfilled.then(template => expect(template.root.nodelist).to.deep.equal(['foo']))
     })
 
+    context('multi line liquid tag', function () {
+      it('handles multi line', function () {
+        return expect(this.engine.parseAndRender('{% liquid\n\nif product.featured_image\necho product.featured_image | img_tag\nelse\necho "product-1" | placeholder_svg_tag\nendif %}')).to.be.rejected.then(output => {
+          console.log(output, '<<<<<<<<<<<<<<<<<')
+          expect(output).to.equal('\nyes\n')
+        })
+      })
+    })
+
     context('whitespace control', function () {
       // https://shopify.github.io/liquid/basics/whitespace/
 
