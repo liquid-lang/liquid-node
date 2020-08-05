@@ -19,6 +19,8 @@ describe('Liquid', function () {
     })
 
     context('whitespace control', function () {
+      // https://shopify.github.io/liquid/basics/whitespace/
+
       it('leaves whitespace as-is', function () {
         return expect(this.engine.parseAndRender('{% unless foo %}\nyes\n{% endunless %}')).to.be.fulfilled.then(output => {
           expect(output).to.equal('\nyes\n')
@@ -30,10 +32,46 @@ describe('Liquid', function () {
           expect(output).to.equal('\nyes')
         })
       })
-      
+
       it('removes whitespace following a `-%}` tag', function () {
         return expect(this.engine.parseAndRender('{% unless foo -%}\nyes\n{% endunless %}')).to.be.fulfilled.then(output => {
           expect(output).to.equal('yes\n')
+        })
+      })
+
+      it('assigns variable with whitespace and render with left spaces', function () {
+        return expect(this.engine.parseAndRender('\n  {% assign username = "foo" -%}  \n\n\n   {{ username -}}     \n\n')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('\n  foo')
+        })
+      })
+
+      it('assigns variable with whitespace and render without left spaces', function () {
+        return expect(this.engine.parseAndRender('\n  {%- assign username = "bar" -%}  \n\n\n   {{ username }}     \n\n')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('bar     \n\n')
+        })
+      })
+
+      it('assigns variable with whitespace and render with right spaces', function () {
+        return expect(this.engine.parseAndRender('  {% assign username = "baz" -%}  \n\n\n   {{ username }}     \n\n')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('  baz     \n\n')
+        })
+      })
+
+      it('assigns variable with whitespace and render without right spaces', function () {
+        return expect(this.engine.parseAndRender('  {% assign username = "buzz" -%}  \n\n\n   {{ username -}}     \n\n')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('  buzz')
+        })
+      })
+
+      it('assigns variable with whitespace and render without any spaces', function () {
+        return expect(this.engine.parseAndRender('  {%- assign username = "foo  bar" -%}  \n\n\n   {{- username -}}     \n\n')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('foo  bar')
+        })
+      })
+
+      it('assigns variable without whitespace and render with', function () {
+        return expect(this.engine.parseAndRender('{% assign username = "baz buzz" %}\n   {{- username -}}    \n')).to.be.fulfilled.then(output => {
+          expect(output).to.equal('baz buzz')
         })
       })
 
@@ -44,7 +82,7 @@ describe('Liquid', function () {
       })
 
       it('works for variable tags', function () {
-        return expect(this.engine.parseAndRender('x\n{{- foo -}}\nz', {foo: 'y'})).to.be.fulfilled.then(output => {
+        return expect(this.engine.parseAndRender('x\n{{- foo -}}\nz', { foo: 'y' })).to.be.fulfilled.then(output => {
           expect(output).to.equal('xyz')
         })
       })
@@ -123,6 +161,18 @@ describe('Liquid', function () {
     return it('in the middle of a line', function () {
       return expect(this.engine.parse('{{ okay }}\n\n   {% illegal %}')).to.be.rejectedWith(Liquid.SyntaxError,
         "Unknown tag 'illegal'\n    at {% illegal %} (undefined:3:4)")
+    })
+  })
+
+  context('reports correct line numbers', function () {
+    it('at beginning of line', function () {
+      return expect(this.engine.parse('test\ntest\n{% illegal %}')).to.be.rejectedWith(Liquid.SyntaxError,
+        "Unknown tag 'illegal'\n    at {% illegal %} (undefined:3:1)")
+    })
+
+    it('in the middle of a line', function () {
+      return expect(this.engine.parse('test\n\n\ntest\ntest\n {% illegal %}\ntest')).to.be.rejectedWith(Liquid.SyntaxError,
+        "Unknown tag 'illegal'\n    at {% illegal %} (undefined:6:2)")
     })
   })
 
