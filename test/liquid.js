@@ -68,6 +68,21 @@ describe('Liquid', function () {
       return expect(this.engine.parseAndRender("{% include 'fixtures/include' %}", { name: 'Josh' })).to.be.fulfilled.then(output => expect(output).to.eq('Josh'))
     })
 
+    it('parses includes with a variable for the path', function () {
+      this.engine.registerFileSystem(new Liquid.LocalFileSystem('./'))
+      return expect(this.engine.parse("{% include {{ path }} %}")).to.be.fulfilled.then(template => expect(template.root.nodelist[0]).to.be.instanceOf(Liquid.Include))
+    })
+
+    it('parses includes with a variable for a path and renders the template with the correct context', function () {
+      this.engine.registerFileSystem(new Liquid.LocalFileSystem('./test'))
+      return expect(this.engine.parseAndRender("{% include {{ path }} %}", { name: 'Josh', path: 'fixtures/include' })).to.be.fulfilled.then(output => expect(output).to.eq('Josh'))
+    })
+
+    it('parses includes with a variable for a nested path and renders the template with the correct context', function () {
+      this.engine.registerFileSystem(new Liquid.LocalFileSystem('./test'))
+      return expect(this.engine.parseAndRender("{% include {{ paths.example }} %}", { name: 'Josh', paths: { example: 'fixtures/include' } })).to.be.fulfilled.then(output => expect(output).to.eq('Josh'))
+    })
+
     it('parses nested-includes and renders the template with the correct context', function () {
       this.engine.registerFileSystem(new Liquid.LocalFileSystem('./test'))
       return expect(this.engine.parseAndRender("{% include 'fixtures/subinclude' %}", { name: 'Josh' })).to.be.fulfilled.then(output => expect(output).to.eq('<h1>Josh</h1>'))
