@@ -7,7 +7,7 @@ chai.use(require('sinon-chai'))
 
 global.expect = (expect = chai.expect)
 
-global.renderTest = function (expected, templateString, assigns, rethrowErrors) {
+global.renderTest = async function (expected, templateString, assigns, rethrowErrors) {
   if (rethrowErrors == null) { rethrowErrors = true }
   const engine = new Liquid.Engine()
 
