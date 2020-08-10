@@ -7,7 +7,9 @@ describe('Iterable', function () {
       return expect(Liquid.Iterable.cast(iterable)).to.equal(iterable)
     })
 
-    return it('casts null/undefined to an empty iterable', () => expect(Liquid.Iterable.cast(null).toArray()).to.become([]))
+    it('casts null/undefined to an empty iterable', () => {
+      expect(Liquid.Iterable.cast(null).toArray()).to.deep.equal([])
+    })
   })
 
   describe('.slice', () =>
