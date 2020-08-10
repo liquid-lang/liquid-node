@@ -75,14 +75,13 @@ describe('Context', function () {
   })
 
   context('.resolve', function () {
-    it('resolves strings', function () {
-      expect(this.ctx.resolve("'42'")).to.equal('42')
-      return expect(this.ctx.resolve('"42"')).to.equal('42')
+    it('resolves strings', async function () {
+      expect(await this.ctx.resolve('"42"')).to.equal('42')
     })
 
-    it('resolves numbers', function () {
-      expect(this.ctx.resolve('42')).to.equal(42)
-      return expect(this.ctx.resolve('3.14')).to.equal(3.14)
+    it('resolves numbers', async function () {
+      expect(await this.ctx.resolve('42')).to.equal(42)
+      expect(await this.ctx.resolve('3.14')).to.equal(3.14)
     })
 
     return it('resolves illegal ranges', function () {

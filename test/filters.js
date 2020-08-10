@@ -91,10 +91,10 @@ describe('StandardFilters', function () {
   describe('join', () =>
     it('joins arrays', function () {
       return Promise.all([
-        expect(this.filters.join([1, 2])).to.become('1 2'),
-        expect(this.filters.join([1, 2], '-')).to.become('1-2'),
-        expect(this.filters.join([])).to.become(''),
-        expect(this.filters.join(new Liquid.Range(1, 5))).to.become('1 2 3 4')
+        expect(this.filters.join([1, 2])).to.equal('1 2'),
+        expect(this.filters.join([1, 2], '-')).to.equal('1-2'),
+        expect(this.filters.join([])).to.equal(''),
+        expect(this.filters.join(new Liquid.Range(1, 5))).to.equal('1 2 3 4')
       ])
     })
   )
@@ -347,11 +347,11 @@ describe('StandardFilters', function () {
   describe('last', () =>
     it('returns last element', function () {
       return Promise.all([
-        expect(this.filters.last([1, 2, 3])).to.become(3),
-        expect(this.filters.last('abc')).to.become('c'),
-        expect(this.filters.last(1)).to.become(1),
-        expect(this.filters.last([])).to.eventually.not.exist,
-        expect(this.filters.last(new Liquid.Range(0, 1000))).to.become(999)
+        expect(this.filters.last([1, 2, 3])).to.equal(3),
+        expect(this.filters.last('abc')).to.equal('c'),
+        expect(this.filters.last(1)).to.equal(1),
+        expect(this.filters.last([])).to.be.undefined,
+        expect(this.filters.last(new Liquid.Range(0, 1000))).to.equal(999)
       ])
     })
   )
@@ -359,11 +359,11 @@ describe('StandardFilters', function () {
   describe('first', () =>
     it('returns first element', function () {
       return Promise.all([
-        expect(this.filters.first([1, 2, 3])).to.become(1),
-        expect(this.filters.first('abc')).to.become('a'),
-        expect(this.filters.first(1)).to.become(1),
-        expect(this.filters.first([])).to.eventually.not.exist,
-        expect(this.filters.first(new Liquid.Range(0, 1000))).to.become(0)
+        expect(this.filters.first([1, 2, 3])).to.equal(1),
+        expect(this.filters.first('abc')).to.equal('a'),
+        expect(this.filters.first(1)).to.equal(1),
+        expect(this.filters.first([])).to.be.undefined,
+        expect(this.filters.first(new Liquid.Range(0, 1000))).to.equal(0)
       ])
     })
   )
