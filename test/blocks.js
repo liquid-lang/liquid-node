@@ -1,3 +1,4 @@
+const { expect } = require('chai')
 const Liquid = require('..')
 
 describe('Blocks (in general)', function () {
@@ -138,23 +139,52 @@ describe('Decrements', function () {
 })
 
 describe('Render', () => {
+  let engine
+
+  beforeEach(() => {
+    engine = new Liquid.Engine()
+    engine.registerFileSystem(new Liquid.LocalFileSystem('./test/fixtures'))
+  })
+
   it('renders the provided snippet', async () => {
-    return renderTest('Rendered!', '{% render "render.html" %}')
+    const expected = 'Rendered!'
+    const actual = await engine.parseAndRender('{% render "render" %}')
+    expect(actual).to.equal(expected)
+  })
+
+  it('renders a snippet whose path is a variable', async () => {
+    const expected = 'Rendered!'
+    const actual = await engine.parseAndRender('{% assign filepath = "render" %}{% render "render" %}')
+    expect(actual).to.equal(expected)
   })
 
   it('renders the provided snippet with a single variable', async () => {
-    return renderTest('Jason', '{% render "include.html", name: "Jason" %}')
+    const expected = 'Jason'
+    const actual = await engine.parseAndRender('{% render "include", name: "Jason" %}')
+    expect(actual).to.equal(expected)
   })
 
   it('renders the provided snippet with a single pre-assigned variable', async () => {
-    return renderTest('Jason', '{% name = "Jason" %}{% render "include.html", name: name %}')
+    const expected = 'Jason'
+    const actual = await engine.parseAndRender('{% assign name = "Jason" %}{% render "include", name: name %}')
+    expect(actual).to.equal(expected)
+  })
+
+  it('renders the provided snippet with a single variable from the context', async () => {
+    const expected = 'Jason'
+    const actual = await engine.parseAndRender('{% render "include", name: name %}', { name: 'Jason' })
+    expect(actual).to.equal(expected)
   })
 
   it('renders the provided snippet with multiple variables', async () => {
-    return renderTest('Jason, JasonEtco', '{% render "render-multiple.html", name: "Jason", login: "JasonEtco" %}')
+    const expected = 'Jason, JasonEtco'
+    const actual = await engine.parseAndRender('{% render "render-multiple", name: "Jason", login: "JasonEtco" %}')
+    expect(actual).to.equal(expected)
   })
 
   it('does not have access to the external context', async () => {
-    return renderTest('Nope', '{% render "render-context.html" %}', { externalContext: true })
+    const expected = 'Nope!'
+    const actual = await engine.parseAndRender('{% render "render-context" %}', { externalContext: true })
+    expect(actual).to.equal(expected)
   })
 })
