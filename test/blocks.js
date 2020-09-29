@@ -138,7 +138,7 @@ describe('Decrements', function () {
   return it('interprents non-existing variables as 0', () => renderTest('-1', '{% decrement i %}'))
 })
 
-describe('Render', () => {
+describe.only('Render', () => {
   let engine
 
   beforeEach(() => {
@@ -154,7 +154,7 @@ describe('Render', () => {
 
   it('renders a snippet whose path is a variable', async () => {
     const expected = 'Rendered!'
-    const actual = await engine.parseAndRender('{% assign filepath = "render" %}{% render "render" %}')
+    const actual = await engine.parseAndRender('{% assign filepath = "render" %}{% render filepath %}')
     expect(actual).to.equal(expected)
   })
 
@@ -183,7 +183,7 @@ describe('Render', () => {
   })
 
   it('does not have access to the external context', async () => {
-    const expected = 'Nope!'
+    const expected = 'Nope'
     const actual = await engine.parseAndRender('{% render "render-context" %}', { externalContext: true })
     expect(actual).to.equal(expected)
   })
