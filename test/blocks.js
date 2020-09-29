@@ -136,3 +136,25 @@ describe('Decrements', function () {
 
   return it('interprents non-existing variables as 0', () => renderTest('-1', '{% decrement i %}'))
 })
+
+describe('Render', () => {
+  it('renders the provided snippet', async () => {
+    return renderTest('Rendered!', '{% render "render.html" %}')
+  })
+
+  it('renders the provided snippet with a single variable', async () => {
+    return renderTest('Jason', '{% render "include.html", name: "Jason" %}')
+  })
+
+  it('renders the provided snippet with a single pre-assigned variable', async () => {
+    return renderTest('Jason', '{% name = "Jason" %}{% render "include.html", name: name %}')
+  })
+
+  it('renders the provided snippet with multiple variables', async () => {
+    return renderTest('Jason, JasonEtco', '{% render "render-multiple.html", name: "Jason", login: "JasonEtco" %}')
+  })
+
+  it('does not have access to the external context', async () => {
+    return renderTest('Nope', '{% render "render-context.html" %}', { externalContext: true })
+  })
+})
