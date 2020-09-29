@@ -182,6 +182,24 @@ describe.only('Render', () => {
     expect(actual).to.equal(expected)
   })
 
+  it('renders the provided snippet with many variables', async () => {
+    const expected = 'Jason, JasonEtco, Example, pepperoni'
+    const actual = await engine.parseAndRender('{% render "render-many", name: "Jason", login: "JasonEtco", another: "Example", pizza: "pepperoni" %}')
+    expect(actual).to.equal(expected)
+  })
+
+  it('renders the provided snippet with a single object variable', async () => {
+    const expected = 'JasonEtco'
+    const actual = await engine.parseAndRender('{% render "render-object", user: user %}', { user: { login: 'JasonEtco' } })
+    expect(actual).to.equal(expected)
+  })
+
+  it('renders the provided snippet with a single boolean variable', async () => {
+    const expected = 'User'
+    const actual = await engine.parseAndRender('{% render "render-boolean", user: true %}')
+    expect(actual).to.equal(expected)
+  })
+
   it('does not have access to the external context', async () => {
     const expected = 'Nope'
     const actual = await engine.parseAndRender('{% render "render-context" %}', { externalContext: true })
