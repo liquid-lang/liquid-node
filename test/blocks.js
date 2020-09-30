@@ -195,4 +195,9 @@ describe('Render', () => {
     const actual = await engine.parseAndRender('{% render "render-context" %}', { externalContext: true })
     expect(actual).to.equal('Nope')
   })
+
+  it('works using the with...as syntax', async () => {
+    const actual = await engine.parseAndRender('{% render "render-object" with user as user %}', { user: { login: 'JasonEtco' } })
+    expect(actual).to.equal('JasonEtco')
+  })
 })
