@@ -138,7 +138,7 @@ describe('Decrements', function () {
   return it('interprents non-existing variables as 0', () => renderTest('-1', '{% decrement i %}'))
 })
 
-describe('Render', () => {
+describe.only('Render', () => {
   let engine
 
   beforeEach(() => {
@@ -199,5 +199,11 @@ describe('Render', () => {
   it('works using the with...as syntax', async () => {
     const actual = await engine.parseAndRender('{% render "render-object" with user as user %}', { user: { login: 'JasonEtco' } })
     expect(actual).to.equal('JasonEtco')
+  })
+
+  it('works using the for...as syntax', async () => {
+    const context = { users: [{ login: 'JasonEtco' }, { login: 'defunkt' }] }
+    const actual = await engine.parseAndRender('{% render "render-object" for users as user %}', context)
+    expect(actual).to.equal('JasonEtcodefunkt')
   })
 })
