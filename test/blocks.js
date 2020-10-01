@@ -138,7 +138,7 @@ describe('Decrements', function () {
   return it('interprents non-existing variables as 0', () => renderTest('-1', '{% decrement i %}'))
 })
 
-describe.only('Render', () => {
+describe('Render', () => {
   let engine
 
   beforeEach(() => {
@@ -205,5 +205,10 @@ describe.only('Render', () => {
     const context = { users: [{ login: 'JasonEtco' }, { login: 'defunkt' }] }
     const actual = await engine.parseAndRender('{% render "render-object" for users as user %}', context)
     expect(actual).to.equal('JasonEtcodefunkt')
+  })
+
+  it('renders the provided snippet with a quote in a variable', async () => {
+    const actual = await engine.parseAndRender('{% render "include", name: \'My name is "Jason"\' %}')
+    expect(actual).to.equal('My name is "Jason"')
   })
 })
