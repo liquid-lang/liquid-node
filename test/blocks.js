@@ -1,3 +1,4 @@
+const { expect } = require('chai')
 const Liquid = require('..')
 
 describe('Blocks (in general)', function () {
@@ -135,4 +136,79 @@ describe('Decrements', function () {
   it('decrements like --i', () => renderTest('0', '{% decrement i %}', { i: 1 }))
 
   return it('interprents non-existing variables as 0', () => renderTest('-1', '{% decrement i %}'))
+})
+
+describe('Render', () => {
+  let engine
+
+  beforeEach(() => {
+    engine = new Liquid.Engine()
+    engine.registerFileSystem(new Liquid.LocalFileSystem('./test/fixtures'))
+  })
+
+  it('renders the provided snippet', async () => {
+    const actual = await engine.parseAndRender('{% render "render" %}')
+    expect(actual).to.equal('Rendered!')
+  })
+
+  it('renders a snippet whose path is a variable', async () => {
+    const actual = await engine.parseAndRender('{% assign filepath = "render" %}{% render filepath %}')
+    expect(actual).to.equal('Rendered!')
+  })
+
+  it('renders the provided snippet with a single variable', async () => {
+    const actual = await engine.parseAndRender('{% render "include", name: "Jason" %}')
+    expect(actual).to.equal('Jason')
+  })
+
+  it('renders the provided snippet with a single pre-assigned variable', async () => {
+    const actual = await engine.parseAndRender('{% assign name = "Jason" %}{% render "include", name: name %}')
+    expect(actual).to.equal('Jason')
+  })
+
+  it('renders the provided snippet with a single variable from the context', async () => {
+    const actual = await engine.parseAndRender('{% render "include", name: name %}', { name: 'Jason' })
+    expect(actual).to.equal('Jason')
+  })
+
+  it('renders the provided snippet with multiple variables', async () => {
+    const actual = await engine.parseAndRender('{% render "render-multiple", name: "Jason", login: "JasonEtco" %}')
+    expect(actual).to.equal('Jason, JasonEtco')
+  })
+
+  it('renders the provided snippet with many variables', async () => {
+    const actual = await engine.parseAndRender('{% render "render-many", name: "Jason", login: "JasonEtco", another: "Example", pizza: "pepperoni" %}')
+    expect(actual).to.equal('Jason, JasonEtco, Example, pepperoni')
+  })
+
+  it('renders the provided snippet with a single object variable', async () => {
+    const actual = await engine.parseAndRender('{% render "render-object", user: user %}', { user: { login: 'JasonEtco' } })
+    expect(actual).to.equal('JasonEtco')
+  })
+
+  it('renders the provided snippet with a single boolean variable', async () => {
+    const actual = await engine.parseAndRender('{% render "render-boolean", user: true %}')
+    expect(actual).to.equal('User')
+  })
+
+  it('does not have access to the external context', async () => {
+    const actual = await engine.parseAndRender('{% render "render-context" %}', { externalContext: true })
+    expect(actual).to.equal('Nope')
+  })
+
+  it('works using the with...as syntax', async () => {
+    const actual = await engine.parseAndRender('{% render "render-object" with user as user %}', { user: { login: 'JasonEtco' } })
+    expect(actual).to.equal('JasonEtco')
+  })
+
+  it('works using the for...as syntax', async () => {
+    const context = { users: [{ login: 'JasonEtco' }, { login: 'defunkt' }] }
+    const actual = await engine.parseAndRender('{% render "render-object" for users as user %}', context)
+    expect(actual).to.equal('JasonEtcodefunkt')
+  })
+
+  it('renders the provided snippet with a quote in a variable', async () => {
+    const actual = await engine.parseAndRender('{% render "include", name: \'My name is "Jason"\' %}')
+    expect(actual).to.equal('My name is "Jason"')
+  })
 })
