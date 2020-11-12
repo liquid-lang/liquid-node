@@ -207,6 +207,12 @@ describe('Render', () => {
     expect(actual).to.equal('JasonEtcodefunkt')
   })
 
+  it('returns an empty string if the value is falsy', async () => {
+    const context = { users: undefined }
+    const actual = await engine.parseAndRender('{% render "render-object" for users as user %}', context)
+    expect(actual).to.equal('')
+  })
+
   it('renders the provided snippet with a quote in a variable', async () => {
     const actual = await engine.parseAndRender('{% render "include", name: \'My name is "Jason"\' %}')
     expect(actual).to.equal('My name is "Jason"')
