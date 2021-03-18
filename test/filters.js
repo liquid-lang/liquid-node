@@ -184,6 +184,12 @@ describe('StandardFilters', function () {
     })
   )
 
+  describe('lstrip', () =>
+    it('remove empty space from the beginning of a string', function () {
+      return expect(this.filters.lstrip('   a b c')).to.equal('a b c')
+    })
+  )
+
   describe('strip_html', () =>
     it('strip html from string', function () {
       expect(this.filters.strip_html('<div>test</div>')).to.equal('test')
@@ -237,6 +243,11 @@ describe('StandardFilters', function () {
   describe('remove_first', () =>
     it('remove the first occurrence', function () {
       return expect(this.filters.remove_first('a a a a', 'a')).to.equal(' a a a')
+    })
+  )
+  describe('rstrip', () =>
+    it('remove empty space from the beginning of a string', function () {
+      return expect(this.filters.rstrip('a b c    ')).to.equal('a b c')
     })
   )
 
